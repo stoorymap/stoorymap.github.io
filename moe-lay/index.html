@@ -12,7 +12,8 @@
         padding: 0;
         width: 100%;
         height: 100%;
-        background: #dad8e8;
+        /* background: #dad8e8; */
+        background: #e8b8c4;
         overflow: hidden;
       }
       canvas {
@@ -26,92 +27,115 @@
         cursor: grabbing;
       }
     </style>
+    <script>
+      window.process = { env: { NODE_ENV: "development" } };
+    </script>
   </head>
   <body>
     <canvas id="c"></canvas>
 
     
   <script type="module">// story-map/moe-lay/scripts/main.js
-var l = document.getElementById("c"), u = l.getContext("2d");
-function j() {
-  let t = window.devicePixelRatio || 1, h = 4096, o = 16777216, e = Math.min(t, 4096 / window.innerWidth, 4096 / window.innerHeight), s = window.innerWidth * e * window.innerHeight * e;
-  if (s > 16777216)
-    e *= Math.sqrt(16777216 / s);
-  l.width = Math.floor(window.innerWidth * e), l.height = Math.floor(window.innerHeight * e), l.style.width = window.innerWidth + "px", l.style.height = window.innerHeight + "px", u.setTransform(e, 0, 0, e, 0, 0), u.imageSmoothingEnabled = !0, u.imageSmoothingQuality = "high", x();
+var u = document.getElementById("c"), i = u.getContext("2d");
+function A() {
+  let t = window.devicePixelRatio || 1, o = 4096, e = 16777216, l = Math.min(t, 4096 / window.innerWidth, 4096 / window.innerHeight), h = window.innerWidth * l * window.innerHeight * l;
+  if (h > 16777216)
+    l *= Math.sqrt(16777216 / h);
+  u.width = Math.floor(window.innerWidth * l), u.height = Math.floor(window.innerHeight * l), u.style.width = window.innerWidth + "px", u.style.height = window.innerHeight + "px", i.setTransform(l, 0, 0, l, 0, 0), i.imageSmoothingEnabled = !0, i.imageSmoothingQuality = "high", a();
 }
-window.addEventListener("resize", j);
-window.addEventListener("load", j);
+window.addEventListener("resize", A);
+window.addEventListener("load", A);
+var g = [];
+function T(t) {
+  let o = u.getBoundingClientRect();
+  return [
+    Math.round((t.clientX - o.left - n.x) / n.zoom),
+    Math.round((t.clientY - o.top - n.y) / n.zoom)
+  ];
+}
+u.addEventListener("click", (t) => {
+  if (!t.shiftKey)
+    return;
+  g.push(T(t)), console.log(`${g.length} points`, g[g.length - 1]);
+});
+addEventListener("keydown", (t) => {
+  if (t.key === "Enter" && g.length)
+    console.log(JSON.stringify(g)), g.length = 0;
+  else if (t.key === "Backspace" && g.length)
+    g.pop(), console.log(`${g.length} points`);
+});
 
 // story-map/moe-lay/scripts/assets.js
-var T = "png", k = {}, _ = {}, z = {};
-function f(t, h = T) {
-  if (k[t])
-    return k[t];
-  let o = new Image;
-  k[t] = o, _[t] = !1;
-  let e = t.replace(/_/g, "-");
-  return o.onerror = () => console.warn(`Failed to load assets/${e}.${h}`), o.onload = () => {
-    if (_[t] = !0, z[t])
-      z[t]();
-    x();
-  }, o.src = `assets/${e}.${h}`, o;
+var P = "png", $ = {}, _ = {}, X = {};
+function p(t, o = P) {
+  if ($[t])
+    return $[t];
+  let e = new Image;
+  $[t] = e, _[t] = !1;
+  let l = t.replace(/_/g, "-");
+  return e.onerror = () => console.warn(`Failed to load assets/${l}.${o}`), e.onload = () => {
+    if (_[t] = !0, X[t])
+      X[t]();
+    a();
+  }, e.src = `assets/${l}.${o}`, e;
 }
-function w(t) {
+function b(t) {
   return !!_[t];
 }
-function B(t, h) {
-  z[t] = h;
+function Q(t, o) {
+  X[t] = o;
 }
 
 // story-map/moe-lay/scripts/road.js
-var d = [];
-function O(t) {
-  d = t;
+var x = [];
+function C(t) {
+  x = t;
 }
-function A(t, h, o, e, s) {
-  let i = [{ x: t, y: h, curve: !1 }], y = 0;
-  for (let g of s)
-    if (g.straight)
-      for (let r = 0;r < g.straight; r++) {
-        let a = i[i.length - 1];
-        i.push({
-          x: a.x + Math.cos(y) * o,
-          y: a.y + Math.sin(y) * o,
+function L(t, o, e, l, h) {
+  let s = [{ x: t, y: o, curve: !1 }], r = 0;
+  for (let f of h)
+    if (f.straight)
+      for (let y = 0;y < f.straight; y++) {
+        let c = s[s.length - 1];
+        s.push({
+          x: c.x + Math.cos(r) * e,
+          y: c.y + Math.sin(r) * e,
           curve: !1
         });
       }
-    else if (g.curve) {
-      let a = g.curve * Math.PI / 180 / 14;
-      for (let M = 0;M < 14; M++) {
-        y += a;
-        let Z = i[i.length - 1];
-        i.push({
-          x: Z.x + Math.cos(y) * e,
-          y: Z.y + Math.sin(y) * e,
+    else if (f.curve) {
+      let c = f.curve * Math.PI / 180 / 14;
+      for (let v = 0;v < 14; v++) {
+        r += c;
+        let N = s[s.length - 1];
+        s.push({
+          x: N.x + Math.cos(r) * l,
+          y: N.y + Math.sin(r) * l,
           curve: !0
         });
       }
     }
-  return i;
+  return s;
 }
 
 // story-map/moe-lay/scripts/scene.js
-var L = [
+var E = [
   { straight: 8 },
   { curve: -90 },
+  { straight: 8 },
   { curve: -90 },
-  { straight: 4 },
+  { straight: 7 },
   { curve: 90 },
   { straight: 2 },
   { curve: -90 },
-  { straight: 4 },
+  { straight: 14 },
   { curve: -90 },
-  { straight: 8 },
+  { straight: 20 },
   { curve: -90 },
   { curve: 90 },
-  { straight: 4 },
-  { curve: -90 },
   { straight: 10 },
+  { curve: -90 },
+  { straight: 30 },
   { curve: -60 },
   { curve: 60 },
   { straight: 4 },
@@ -119,60 +143,64 @@ var L = [
   { straight: 4 },
   { curve: -90 },
   { curve: 90 },
-  { straight: 4 }
-], U = [
-  { name: "su-myat", x: -200, y: 200, height: 175 },
-  { name: "moe-lay", x: -400, y: 200, height: 200 },
-  { name: "jan-2023", x: 0, y: 400, height: 80 },
-  { name: "cl-building", x: 0, y: -600, height: 900 },
-  { name: "scoopy", x: 650, y: 100, height: 200 },
-  { name: "may-2023", x: 1250, y: 300, height: 80 },
-  { name: "iconsiam", x: 1450, y: -100, height: 600 },
-  { name: "sun-flowers", x: 1650, y: -500, height: 300 },
-  { name: "aug-2023", x: 1300, y: -650, height: 80 },
-  { name: "castle", x: 900, y: -650, height: 700 },
-  { name: "water-gun", x: 800, y: -650, height: 100 },
-  { name: "jun-2024", x: 300, y: -800, height: 80 },
-  { name: "temple", x: 300, y: -1520, height: 700 },
-  { name: "croc-1", x: 800, y: -880, height: 70 },
-  { name: "croc-2", x: 1000, y: -870, height: 70 },
-  { name: "dec-2024", x: -150, y: -1700, height: 80 },
-  { name: "kayak-boat", x: -950, y: -1700, height: 100 },
-  { name: "kayak-padal-1", x: -650, y: -2050, height: 300 },
-  { name: "kayak-padal-2", x: -850, y: -2050, height: 300 },
-  { name: "life-jacket-1", x: -450, y: -1900, height: 100 },
-  { name: "life-jacket-2", x: -550, y: -2050, height: 100 },
-  { name: "jan-2025", x: -1700, y: -1900, height: 80 },
-  { name: "painting-1", x: -1900, y: -1900, height: 100 },
-  { name: "painting-2", x: -1850, y: -2050, height: 100 },
-  { name: "jun-2025", x: -1800, y: -850, height: 80 },
-  { name: "naruto", x: -1600, y: -850, height: 250 },
-  { name: "bts", x: -1500, y: -350, height: 300 },
-  { name: "sept-2025", x: -1000, y: 50, height: 80 },
-  { name: "jurassic-world-entrance", x: -1000, y: 250, height: 300 },
-  { name: "jurassic-world", x: -2300, y: 650, height: 600 },
-  { name: "nov-2025", x: -450, y: 1500, height: 80 },
-  { name: "deadly-bridge", x: -200, y: 1000, height: 600 },
-  { name: "jumper", x: -200, y: 1800, height: 100 },
-  { name: "life-jacket-1", x: -350, y: 1700, height: 100 },
-  { name: "life-jacket-2", x: 200, y: 1750, height: 100 },
-  { name: "duck-boat", x: 1100, y: 1400, height: 200 },
-  { name: "marathon-no-123", x: 1850, y: 1100, height: 80 },
-  { name: "marathon-no-166", x: 1700, y: 1300, height: 80 },
-  { name: "marathon-medal-1", x: 1750, y: 1100, height: 140 },
-  { name: "marathon-medal-2", x: 1800, y: 1200, height: 90 },
-  { name: "dumbbell-1", x: 2300, y: 1000, height: 90 },
-  { name: "dumbbell-2", x: 2400, y: 1100, height: 90 },
-  { name: "treadmill", x: 2150, y: 1100, height: 250 },
-  { name: "jan-2026", x: 3600, y: 600, height: 80 },
-  { name: "graduation-cap", x: 3600, y: 0, height: 80 },
-  { name: "graduation-gift", x: 3700, y: 60, height: 70 },
-  { name: "graduation-gown", x: 3600, y: 150, height: 200 },
+  { straight: 15 },
+  { curve: -45 },
+  { straight: 5 },
+  { curve: 45 },
+  { straight: 3 }
+], S = [
+  { name: "su-myat", x: -196, y: 153, height: 175 },
+  { name: "moe-lay", x: -403, y: 128, height: 200 },
+  { name: "jan-2023", x: 246, y: 224, height: 80 },
+  { name: "cl-building", x: 221, y: -1534, height: 900 },
+  { name: "scoopy", x: 747, y: -280, height: 200 },
+  { name: "may-2023", x: 1649, y: -382, height: 80 },
+  { name: "iconsiam", x: 1961, y: -1184, height: 600 },
+  { name: "sun-flowers", x: 2001, y: -474, height: 300 },
+  { name: "aug-2023", x: 1360, y: -1805, height: 80 },
+  { name: "castle", x: 2291, y: -2537, height: 700 },
+  { name: "water-gun", x: 766, y: -2115, height: 100 },
+  { name: "jun-2024", x: 165, y: -1919, height: 80 },
+  { name: "temple", x: 918, y: -3347, height: 700 },
+  { name: "croc-1", x: 308, y: -2850, height: 70 },
+  { name: "croc-2", x: 161, y: -2891, height: 70 },
+  { name: "dec-2024", x: -1131, y: -3028, height: 80 },
+  { name: "kayak-boat", x: -1957, y: -2648, height: 100 },
+  { name: "kayak-padal-1", x: -1110, y: -2735, height: 300 },
+  { name: "kayak-padal-2", x: -1296, y: -2601, height: 300 },
+  { name: "life-jacket-1", x: -1459, y: -2902, height: 100 },
+  { name: "life-jacket-2", x: -1785, y: -2450, height: 100 },
+  { name: "jan-2025", x: -3275, y: -1965, height: 80 },
+  { name: "painting-1", x: -2509, y: -1436, height: 100 },
+  { name: "painting-2", x: -2649, y: -1795, height: 100 },
+  { name: "jun-2025", x: -3256, y: 90, height: 80 },
+  { name: "naruto", x: -1693, y: -415, height: 250 },
+  { name: "bts", x: -2811, y: 7, height: 300 },
+  { name: "sept-2025", x: -2195, y: 1807, height: 80 },
+  { name: "jurassic-world-entrance", x: -1705, y: 2373, height: 300 },
+  { name: "jurassic-world", x: -1860, y: 1620, height: 600 },
+  { name: "nov-2025", x: 597, y: 2734, height: 80 },
+  { name: "deadly-bridge", x: 306, y: 975, height: 600 },
+  { name: "jumper", x: 1129, y: 2177, height: 100 },
+  { name: "life-jacket-1", x: 1488, y: 2061, height: 100 },
+  { name: "life-jacket-2", x: 1301, y: 1975, height: 100 },
+  { name: "duck-boat", x: 763, y: 1759, height: 200 },
+  { name: "marathon-no-123", x: 1977, y: 1121, height: 80 },
+  { name: "marathon-no-166", x: 1912, y: 1251, height: 80 },
+  { name: "marathon-medal-1", x: 2134, y: 1043, height: 140 },
+  { name: "marathon-medal-2", x: 2112, y: 1245, height: 90 },
+  { name: "dumbbell-1", x: 2711, y: 1897, height: 90 },
+  { name: "dumbbell-2", x: 2700, y: 1710, height: 90 },
+  { name: "treadmill", x: 2373, y: 1682, height: 250 },
+  { name: "jan-2026", x: 4406, y: 882, height: 80 },
+  { name: "graduation-cap", x: 3671, y: 546, height: 80 },
+  { name: "graduation-gift", x: 3834, y: 930, height: 70 },
+  { name: "graduation-gown", x: 3738, y: 640, height: 200 },
   { name: "feb-2026", x: 3650, y: -600, height: 80 },
-  { name: "bicycle", x: 3450, y: -650, height: 200 },
-  { name: "jun-2026", x: 2650, y: -1250, height: 80 },
-  { name: "alien-at-suvarnabhumi", x: 2750, y: -1750, height: 400 }
-], N = [
+  { name: "bicycle", x: 4055, y: -915, height: 200 },
+  { name: "jun-2026", x: 3707, y: -1977, height: 80 },
+  { name: "alien-at-suvarnabhumi", x: 3926, y: -2755, height: 400 }
+], J = [
   {
     x: -700,
     y: -1000,
@@ -184,23 +212,513 @@ var L = [
     src: "https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/wonton-248173221/ahn-jae-wook-friend-1&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true"
   },
   {
-    x: 2900,
-    y: 1100,
-    width: 450,
+    x: 2061,
+    y: 2215,
+    width: 452,
+    height: 238,
     src: "https://open.spotify.com/embed/track/0W1eHrIACKah9l0Q9v611q"
   }
+], K = [
+  {
+    points: [
+      [135, 411],
+      [67, 20],
+      [-755, 63],
+      [-862, -407],
+      [-1600, -1106],
+      [-1607, -1645],
+      [-1050, -1844],
+      [-403, -2063],
+      [-162, -1792],
+      [228, -1746],
+      [936, -1755],
+      [1346, -1648],
+      [1556, -1306],
+      [1561, -896],
+      [1546, -3],
+      [1190, 349],
+      [682, 407]
+    ],
+    type: "fill",
+    color: "#ff9dac",
+    width: 15
+  },
+  {
+    points: [
+      [1477, 148],
+      [2441, 344],
+      [2633, -111],
+      [3483, 11],
+      [3558, -389],
+      [3556, -1018],
+      [3405, -1303],
+      [2720, -1508],
+      [2434, -1542],
+      [2190, -1383],
+      [1929, -1325],
+      [1567, -1137]
+    ],
+    type: "fill",
+    color: "#ff9dac"
+  },
+  {
+    points: [
+      [1509, -1378],
+      [1576, -1122],
+      [1918, -1307],
+      [2178, -1342],
+      [2415, -1495],
+      [2811, -1467],
+      [3121, -1362],
+      [3533, -1243],
+      [3477, -2358],
+      [3261, -2754],
+      [2242, -2588],
+      [1913, -2346],
+      [1300, -2029],
+      [1284, -1861],
+      [1199, -1705]
+    ],
+    type: "fill",
+    color: "#ff9dac"
+  },
+  {
+    points: [
+      [1266, -1755],
+      [1427, -2038],
+      [1856, -2286],
+      [2408, -2594],
+      [3247, -2762],
+      [2492, -3585],
+      [1874, -3641],
+      [1092, -3439],
+      [-21, -3445],
+      [-579, -3254],
+      [-661, -3024],
+      [-458, -2709],
+      [-477, -2269],
+      [-212, -1836],
+      [253, -1759]
+    ],
+    type: "fill",
+    color: "#f19fd6"
+  },
+  {
+    points: [
+      [-727, -3082],
+      [-477, -2593]
+    ],
+    type: "fill",
+    color: "#96dece"
+  },
+  {
+    points: [
+      [-832, -3129],
+      [-1667, -3141],
+      [-3036, -3113],
+      [-3330, -2842],
+      [-3330, -2326],
+      [-2580, -2273],
+      [-2134, -1941],
+      [-1606, -1667],
+      [-967, -1843],
+      [-430, -2011],
+      [-512, -2781]
+    ],
+    type: "fill",
+    color: "#f19fd6",
+    width: 15
+  },
+  {
+    points: [
+      [-3392, -2371],
+      [-2597, -2279],
+      [-2187, -2003],
+      [-1616, -1734],
+      [-1633, -1569],
+      [-1626, -1106],
+      [-2014, -599],
+      [-2726, -474],
+      [-3373, -554],
+      [-3370, -1015]
+    ],
+    type: "fill",
+    color: "#fea383",
+    width: 15
+  },
+  {
+    points: [
+      [-3390, -567],
+      [-2602, -550],
+      [-1619, -1127],
+      [-1244, -758],
+      [-893, -496],
+      [-780, -45],
+      [-874, 299],
+      [-1431, 804],
+      [-2222, 702],
+      [-2398, 727],
+      [-2535, 610],
+      [-3053, 490],
+      [-3354, 235]
+    ],
+    type: "fill",
+    color: "#fea383"
+  },
+  {
+    points: [
+      [-2258, 1070],
+      [-2381, 718],
+      [-1986, 730],
+      [-1355, 735],
+      [-943, 424],
+      [215, 452],
+      [604, 1198],
+      [270, 2163],
+      [30, 2933],
+      [-1127, 2952],
+      [-1787, 2952],
+      [-2187, 2645],
+      [-2257, 1982]
+    ],
+    type: "fill",
+    color: "#fea383"
+  },
+  {
+    points: [
+      [90, 2925],
+      [-91, 1765],
+      [0, 963],
+      [155, 443],
+      [802, 419],
+      [1177, 386],
+      [1538, 159],
+      [2147, 202],
+      [2824, 690],
+      [3562, 2033],
+      [3156, 2208],
+      [2856, 2507],
+      [2456, 2897]
+    ],
+    type: "fill",
+    color: "#fea383"
+  },
+  {
+    points: [
+      [3523, 2082],
+      [2895, 914],
+      [2441, 446],
+      [2469, 176],
+      [2590, -129],
+      [3090, -95],
+      [3514, -45],
+      [3769, 368],
+      [4356, 518],
+      [4636, 825],
+      [4672, 1746],
+      [4241, 2080]
+    ],
+    type: "fill",
+    color: "#6cc6be"
+  },
+  {
+    points: [
+      [4262, 457],
+      [3845, 366],
+      [3584, 2],
+      [3591, -1375],
+      [4133, -1459],
+      [4740, -1605],
+      [4764, -1200],
+      [4880, -811],
+      [4834, -350],
+      [4814, 429],
+      [4565, 595]
+    ],
+    type: "fill",
+    color: "#6cc6be"
+  },
+  {
+    points: [
+      [3564, -1366],
+      [4211, -1415],
+      [4715, -1531],
+      [4853, -1830],
+      [4731, -2072],
+      [4627, -2642],
+      [4691, -3060],
+      [4341, -3385],
+      [3754, -3804],
+      [3141, -3691],
+      [2598, -3549],
+      [2751, -3351],
+      [3104, -2983],
+      [3367, -2698],
+      [3575, -2177],
+      [3559, -1848]
+    ],
+    type: "fill",
+    color: "#6cc6be"
+  },
+  {
+    points: [
+      [486, 369],
+      [502, 104],
+      [723, -32],
+      [934, -49],
+      [1162, -126],
+      [1230, -483],
+      [826, -471],
+      [580, -503],
+      [544, -654]
+    ],
+    type: "line",
+    color: "#eeefe7",
+    width: 15
+  },
+  {
+    points: [
+      [1570, -380],
+      [1815, -509],
+      [2217, -523],
+      [2378, -521],
+      [2392, -605]
+    ],
+    type: "line",
+    color: "#eeefe7",
+    width: 15
+  },
+  {
+    points: [
+      [1444, -1571],
+      [1606, -1752],
+      [1880, -1841],
+      [2011, -1785],
+      [2218, -1705],
+      [2382, -1688],
+      [2568, -1720],
+      [2574, -1879]
+    ],
+    type: "line",
+    color: "#eeefe7",
+    width: 15
+  },
+  {
+    points: [
+      [87, -1788],
+      [95, -2182],
+      [218, -2393],
+      [763, -2507],
+      [886, -2594],
+      [1187, -2592],
+      [1239, -2664]
+    ],
+    type: "line",
+    color: "#eeefe7",
+    width: 15
+  },
+  {
+    points: [
+      [554, -2472],
+      [432, -2689],
+      [240, -2759],
+      [76, -2818],
+      [92, -2897]
+    ],
+    type: "line",
+    color: "#eeefe7",
+    width: 15
+  },
+  {
+    points: [
+      [-1208, -3142],
+      [-1193, -2913],
+      [-1242, -2736],
+      [-1541, -2732],
+      [-1932, -2728],
+      [-2253, -2627]
+    ],
+    type: "line",
+    color: "#eeefe7",
+    width: 15
+  },
+  {
+    points: [
+      [-1544, -2596],
+      [-1332, -2619],
+      [-1214, -2606],
+      [-1244, -2535],
+      [-1483, -2514],
+      [-1624, -2519],
+      [-1772, -2513],
+      [-1889, -2518],
+      [-1943, -2578],
+      [-1794, -2576]
+    ],
+    type: "fill",
+    color: "#6fb0d6"
+  },
+  {
+    points: [
+      [-3393, -1767],
+      [-3016, -1763],
+      [-2701, -1652],
+      [-2506, -1374]
+    ],
+    type: "line",
+    color: "#eeefe7",
+    width: 15
+  },
+  {
+    points: [
+      [-2267, 1750],
+      [-1957, 1777],
+      [-1963, 2017],
+      [-1811, 2288],
+      [-1377, 2321],
+      [-1312, 2211]
+    ],
+    type: "line",
+    color: "#eeefe7",
+    width: 15
+  },
+  {
+    points: [
+      [-1995, 1758],
+      [-1875, 1364],
+      [-1331, 1312],
+      [-1058, 1032]
+    ],
+    type: "line",
+    color: "#eeefe7",
+    width: 15
+  },
+  {
+    points: [
+      [905, 2908],
+      [949, 2392],
+      [933, 2182],
+      [653, 1901],
+      [795, 1739],
+      [822, 1563]
+    ],
+    type: "line",
+    color: "#eeefe7",
+    width: 15
+  },
+  {
+    points: [
+      [955, 2319],
+      [1656, 2322],
+      [1918, 2125],
+      [2082, 1858],
+      [2403, 1844]
+    ],
+    type: "line",
+    color: "#eeefe7",
+    width: 15
+  },
+  {
+    points: [
+      [2092, 1853],
+      [1990, 1558],
+      [2120, 1311]
+    ],
+    type: "line",
+    color: "#eeefe7",
+    width: 15
+  },
+  {
+    points: [
+      [-3239, 348],
+      [-2981, 93],
+      [-2263, -51],
+      [-2039, 30],
+      [-1600, -181]
+    ],
+    type: "line",
+    color: "#eeefe7",
+    width: 15
+  },
+  {
+    points: [
+      [3582, -428],
+      [3901, -432],
+      [4103, -646],
+      [4231, -769]
+    ],
+    type: "line",
+    color: "#eeefe7",
+    width: 15
+  },
+  {
+    points: [
+      [3993, -503],
+      [4230, -356],
+      [4402, -226],
+      [4465, 45]
+    ],
+    type: "line",
+    color: "#eeefe7",
+    width: 15
+  },
+  {
+    points: [
+      [4690, 1146],
+      [4331, 1145],
+      [4074, 922],
+      [3690, 880]
+    ],
+    type: "line",
+    color: "#eeefe7",
+    width: 15
+  },
+  {
+    points: [
+      [4297, 1133],
+      [3876, 1330],
+      [3841, 1549]
+    ],
+    type: "line",
+    color: "#eeefe7",
+    width: 15
+  },
+  {
+    points: [
+      [3578, -1841],
+      [3788, -1849],
+      [3885, -1960],
+      [3730, -2165],
+      [3979, -2368]
+    ],
+    type: "line",
+    color: "#eeefe7",
+    width: 15
+  },
+  {
+    points: [[5183, 2713]],
+    type: "line",
+    color: "#b3e69e",
+    width: 15
+  },
+  {
+    points: [[-129, 102]],
+    type: "line",
+    color: "#b3e69e",
+    width: 15
+  }
 ];
-function Q(t) {
-  for (let { name: h, x: o, y: e, height: s } of U) {
-    if (o + s < t.left || o - s > t.right || e + s < t.top || e - s > t.bottom)
+function G(t) {
+  for (let { name: o, x: e, y: l, height: h } of S) {
+    if (e + h < t.left || e - h > t.right || l + h < t.top || l - h > t.bottom)
       continue;
-    C(h, o, e, s);
+    V(o, e, l, h);
   }
 }
 
 // story-map/moe-lay/scripts/embeds.js
-var F = 300, G = 300, m = null, E = /* @__PURE__ */ new Map;
-function V() {
+var k = 300, q = 300, m = null, F = /* @__PURE__ */ new Map;
+function z() {
   if (m)
     return m;
   return m = document.createElement("div"), m.id = "embed-layer", Object.assign(m.style, {
@@ -211,130 +729,169 @@ function V() {
     zIndex: "10"
   }), document.body.appendChild(m), m;
 }
-function R(t) {
-  let h = document.createElement("div");
-  Object.assign(h.style, {
+function H(t) {
+  let o = document.createElement("div");
+  Object.assign(o.style, {
     position: "absolute",
     top: "0",
     left: "0",
-    width: (t.width ?? F) + "px",
-    height: (t.height ?? G) + "px",
+    width: (t.width ?? k) + "px",
+    height: (t.height ?? q) + "px",
     transformOrigin: "top left",
     pointerEvents: "auto"
   });
-  let o = document.createElement("iframe");
-  return o.width = "100%", o.height = "100%", o.scrolling = "no", o.frameBorder = "no", o.allow = "autoplay; encrypted-media", o.loading = "lazy", o.src = t.src, h.appendChild(o), V().appendChild(h), h;
+  let e = document.createElement("iframe");
+  return e.width = "100%", e.height = "100%", e.scrolling = "no", e.frameBorder = "no", e.allow = "autoplay; encrypted-media", e.loading = "lazy", e.src = t.src, o.appendChild(e), z().appendChild(o), o;
 }
 function I() {
-  let { innerWidth: t, innerHeight: h } = window;
-  for (let o of N) {
-    let e = o.x * n.zoom + n.x, s = o.y * n.zoom + n.y, i = (o.width ?? F) * n.zoom, y = (o.height ?? G) * n.zoom, g = e + i < 0 || e > t || s + y < 0 || s > h, r = E.get(o);
-    if (g) {
-      if (r)
-        r.style.display = "none";
+  let { innerWidth: t, innerHeight: o } = window;
+  for (let e of J) {
+    let l = e.x * n.zoom + n.x, h = e.y * n.zoom + n.y, s = (e.width ?? k) * n.zoom, r = (e.height ?? q) * n.zoom, f = l + s < 0 || l > t || h + r < 0 || h > o, y = F.get(e);
+    if (f) {
+      if (y)
+        y.style.display = "none";
       continue;
     }
-    if (!r)
-      r = R(o), E.set(o, r);
-    r.style.display = "", r.style.transform = `translate(${e}px, ${s}px) scale(${n.zoom})`;
+    if (!y)
+      y = H(e), F.set(e, y);
+    y.style.display = "", y.style.width = (e.width ?? k) + "px", y.style.height = (e.height ?? q) + "px", y.style.transform = `translate(${l}px, ${h}px) scale(${n.zoom})`;
   }
 }
 
+// story-map/moe-lay/scripts/terrain.js
+function t1(t) {
+  let o = t.points.map((h) => h[0]), e = t.points.map((h) => h[1]), l = (t.type === "line" ? (t.width || 0) / 2 : (t.borderWidth || 0) / 2) + 200;
+  return {
+    l: Math.min(...o) - l,
+    t: Math.min(...e) - l,
+    r: Math.max(...o) + l,
+    b: Math.max(...e) + l
+  };
+}
+function o1(t, o = 0.5) {
+  let e = t.length, l = (s) => t[Math.max(0, Math.min(e - 1, s))], h = o / 3;
+  i.moveTo(t[0][0], t[0][1]);
+  for (let s = 0;s < e - 1; s++) {
+    let r = l(s - 1), f = l(s), y = l(s + 1), c = l(s + 2);
+    i.bezierCurveTo(f[0] + (y[0] - r[0]) * h, f[1] + (y[1] - r[1]) * h, y[0] - (c[0] - f[0]) * h, y[1] - (c[1] - f[1]) * h, y[0], y[1]);
+  }
+}
+function U(t) {
+  for (let o of K) {
+    if (!o.points || o.points.length < 2)
+      continue;
+    let e = t1(o);
+    if (e.r < t.left || e.l > t.right || e.b < t.top || e.t > t.bottom)
+      continue;
+    if (i.beginPath(), o1(o.points, o.tension), o.type === "fill") {
+      if (i.fillStyle = o.color, i.fill(), o.border)
+        i.closePath(), i.lineJoin = "round", i.setLineDash(o.borderDash || []), i.strokeStyle = o.border, i.lineWidth = o.borderWidth || 10, i.stroke(), i.setLineDash([]);
+    } else if (o.type === "line")
+      i.lineCap = "round", i.lineJoin = "round", i.setLineDash(o.dash || []), i.strokeStyle = o.color, i.lineWidth = o.width || 15, i.stroke(), i.setLineDash([]);
+  }
+}
+
+// story-map/moe-lay/scripts/overlays.js
+var R = [];
+
 // story-map/moe-lay/scripts/draw.js
-function W(t = 0) {
-  let h = l.clientWidth, o = l.clientHeight;
+function e1(t = 0) {
+  let o = u.clientWidth, e = u.clientHeight;
   return {
     left: -n.x / n.zoom - t,
     top: -n.y / n.zoom - t,
-    right: (h - n.x) / n.zoom + t,
-    bottom: (o - n.y) / n.zoom + t
+    right: (o - n.x) / n.zoom + t,
+    bottom: (e - n.y) / n.zoom + t
   };
 }
-function x() {
-  u.clearRect(0, 0, l.width, l.height), u.save(), u.translate(n.x, n.y), u.scale(n.zoom, n.zoom), u.imageSmoothingEnabled = n.zoom < 2;
-  let t = W(400);
-  D(t), Q(t), u.restore(), I();
+function a() {
+  i.clearRect(0, 0, u.width, u.height), i.save(), i.translate(n.x, n.y), i.scale(n.zoom, n.zoom), i.imageSmoothingEnabled = n.zoom < 2;
+  let t = e1(400);
+  U(t), l1(t), G(t);
+  for (let o of R)
+    o(i);
+  i.restore(), I();
 }
-function C(t, h, o, e) {
-  let s = f(t);
-  if (!w(t))
+function V(t, o, e, l) {
+  let h = p(t);
+  if (!b(t))
     return;
-  let i = e / s.naturalHeight, y = s.naturalWidth * i;
-  u.drawImage(s, h, o, y, e);
+  let s = l / h.naturalHeight, r = h.naturalWidth * s;
+  i.drawImage(h, o, e, r, l);
 }
-function D(t) {
-  let h = f("road", "svg");
-  if (!w("road"))
+function l1(t) {
+  let o = p("road", "svg");
+  if (!b("road"))
     return;
-  for (let o = 0;o < d.length - 1; o++) {
-    let e = d[o], s = d[o + 1], i = (e.x + s.x) / 2, y = (e.y + s.y) / 2;
-    if (i < t.left || i > t.right || y < t.top || y > t.bottom)
+  for (let e = 0;e < x.length - 1; e++) {
+    let l = x[e], h = x[e + 1], s = (l.x + h.x) / 2, r = (l.y + h.y) / 2;
+    if (s < t.left || s > t.right || r < t.top || r > t.bottom)
       continue;
-    let g = Math.atan2(s.y - e.y, s.x - e.x), r = s.curve ? h.width * 0.5 : h.width, a = h.height;
-    u.save(), u.translate(i, y), u.rotate(g), u.drawImage(h, -r / 2, -a / 2, r, a), u.restore();
+    let f = Math.atan2(h.y - l.y, h.x - l.x), y = h.curve ? o.width * 0.5 : o.width, c = o.height;
+    i.save(), i.translate(s, r), i.rotate(f), i.drawImage(o, -y / 2, -c / 2, y, c), i.restore();
   }
 }
-function H() {
-  let h = f("road", "svg").width * 0.92, o = h * 0.5;
-  O(A(0, 400, h, o, L));
+function n1() {
+  let o = p("road", "svg").width * 0.92, e = o * 0.5;
+  C(L(0, 400, o, e, E));
 }
-B("road", H);
+Q("road", n1);
 
 // story-map/moe-lay/scripts/camera.js
-var n = { x: 500, y: 400, zoom: 0.3 }, P = 0.1, S = 5, v = !1;
-function $() {
-  if (v)
+var n = { x: 500, y: 400, zoom: 0.3 }, h1 = 0.1, i1 = 5, Y = !1;
+function w() {
+  if (Y)
     return;
-  v = !0, requestAnimationFrame(() => {
-    v = !1, x();
+  Y = !0, requestAnimationFrame(() => {
+    Y = !1, a();
   });
 }
-function X(t, h, o) {
-  let e = Math.min(S, Math.max(P, n.zoom * o)), s = (t - n.x) / n.zoom, i = (h - n.y) / n.zoom;
-  n.zoom = e, n.x = t - s * n.zoom, n.y = h - i * n.zoom, $();
+function M(t, o, e) {
+  let l = Math.min(i1, Math.max(h1, n.zoom * e)), h = (t - n.x) / n.zoom, s = (o - n.y) / n.zoom;
+  n.zoom = l, n.x = t - h * n.zoom, n.y = o - s * n.zoom, w();
 }
 
 // story-map/moe-lay/scripts/input.js
-var q = !1, b = 0, p = 0;
-l.addEventListener("mousedown", (t) => {
-  q = !0, b = t.clientX, p = t.clientY, l.classList.add("dragging");
+var B = !1, O = 0, Z = 0;
+u.addEventListener("mousedown", (t) => {
+  B = !0, O = t.clientX, Z = t.clientY, u.classList.add("dragging");
 });
 window.addEventListener("mouseup", () => {
-  q = !1, l.classList.remove("dragging");
+  B = !1, u.classList.remove("dragging");
 });
 window.addEventListener("mousemove", (t) => {
-  if (!q)
+  if (!B)
     return;
-  n.x += t.clientX - b, n.y += t.clientY - p, b = t.clientX, p = t.clientY, $();
+  n.x += t.clientX - O, n.y += t.clientY - Z, O = t.clientX, Z = t.clientY, w();
 });
-l.addEventListener("wheel", (t) => {
+u.addEventListener("wheel", (t) => {
   t.preventDefault();
-  let h = l.getBoundingClientRect(), o = t.clientX - h.left, e = t.clientY - h.top, s = t.deltaY < 0 ? 1.1 : 0.9;
-  X(o, e, s);
+  let o = u.getBoundingClientRect(), e = t.clientX - o.left, l = t.clientY - o.top, h = t.deltaY < 0 ? 1.1 : 0.9;
+  M(e, l, h);
 }, { passive: !1 });
-var c = null, Y = null, J = 1;
-l.addEventListener("touchstart", (t) => {
+var d = null, j = null, W = 1;
+u.addEventListener("touchstart", (t) => {
   if (t.touches.length === 1)
-    c = { x: t.touches[0].clientX, y: t.touches[0].clientY };
+    d = { x: t.touches[0].clientX, y: t.touches[0].clientY };
   else if (t.touches.length === 2)
-    c = null, Y = K(t.touches), J = n.zoom;
+    d = null, j = D(t.touches), W = n.zoom;
 });
-l.addEventListener("touchmove", (t) => {
-  if (t.preventDefault(), t.touches.length === 1 && c) {
-    let h = t.touches[0];
-    n.x += h.clientX - c.x, n.y += h.clientY - c.y, c = { x: h.clientX, y: h.clientY }, $();
+u.addEventListener("touchmove", (t) => {
+  if (t.preventDefault(), t.touches.length === 1 && d) {
+    let o = t.touches[0];
+    n.x += o.clientX - d.x, n.y += o.clientY - d.y, d = { x: o.clientX, y: o.clientY }, w();
   } else if (t.touches.length === 2) {
-    let h = K(t.touches), o = l.getBoundingClientRect(), e = (t.touches[0].clientX + t.touches[1].clientX) / 2 - o.left, s = (t.touches[0].clientY + t.touches[1].clientY) / 2 - o.top, y = J * (h / Y) / n.zoom;
-    X(e, s, y);
+    let o = D(t.touches), e = u.getBoundingClientRect(), l = (t.touches[0].clientX + t.touches[1].clientX) / 2 - e.left, h = (t.touches[0].clientY + t.touches[1].clientY) / 2 - e.top, r = W * (o / j) / n.zoom;
+    M(l, h, r);
   }
 }, { passive: !1 });
-l.addEventListener("touchend", (t) => {
-  if (c = null, Y = null, t.touches.length === 1)
-    c = { x: t.touches[0].clientX, y: t.touches[0].clientY };
+u.addEventListener("touchend", (t) => {
+  if (d = null, j = null, t.touches.length === 1)
+    d = { x: t.touches[0].clientX, y: t.touches[0].clientY };
 });
-function K(t) {
-  let h = t[0].clientX - t[1].clientX, o = t[0].clientY - t[1].clientY;
-  return Math.hypot(h, o);
+function D(t) {
+  let o = t[0].clientX - t[1].clientX, e = t[0].clientY - t[1].clientY;
+  return Math.hypot(o, e);
 }
 </script></body>
 </html>
