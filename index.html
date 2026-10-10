@@ -4,8 +4,567 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Stoory Map</title>
-  </head>
+    
+    
+    <style>
+      div {
+        position: relative;
+        overflow-x: hidden;
+        height: 100dvh;
+      }
+    </style>
+  <style>/* story-map/main.css */
+:root{--color-bg-primary:#fff5e8;--color-primary:#7e4c37;--color-text:#000;--color-transparent:#0000;--font-family:"Unkempt",sans-serif;--font-regular:400;--font-bold:700;--ratio:1.4;--size-body:1.6rem;--size-small:calc(var(--size-body)/var(--ratio));--size-heading:calc(var(--size-body)*var(--ratio));--size-title:calc(var(--size-heading)*var(--ratio));--size-display:calc(var(--size-title)*var(--ratio));font-size:10px;@media (width>=640px){&{--size-body:2rem}}}html,body{font-family:var(--font-family);font-size:var(--size-body);background-blend-mode:multiply,normal;background-color:#accf9d;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E"),linear-gradient(135deg,#ded295 0% 20%,#ded295 80% 100%);background-repeat:repeat,no-repeat;background-size:200px 200px,cover;margin:0}
+</style></head>
   <body>
-    Coming Soon
-  <script type="module"></script></body>
+    <div>
+      <section-hero></section-hero>
+      <section-background-photos></section-background-photos>
+    </div>
+  <script type="module">// lib/asset.js
+function b() {
+  let o = document.documentElement.dataset.base || "./";
+  return new URL(o, location.href);
+}
+function e(o) {
+  return new URL(o, b()).href;
+}
+
+// story-map/scripts/fonts.js
+var w = `
+@font-face {
+    font-family: "Unkempt";
+    src: url("${e("./assets/fonts/Unkempt-Regular.woff2")}") format("woff2");
+    font-weight: 400;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Unkempt";
+    src: url("${e("./assets/fonts/Unkempt-Bold.woff2")}") format("woff2");
+    font-weight: 700;
+    font-display: swap;
+  }
+`, h = document.createElement("style");
+h.textContent = w;
+document.head.appendChild(h);
+
+// lib/define.js
+function y(o, i) {
+  if (o === void 0) {
+    if (i === Array)
+      return [];
+    if (i === Object)
+      return {};
+    if (i === Boolean)
+      return !1;
+    if (i === Number)
+      return 0;
+    return;
+  }
+  if (i === Boolean)
+    return Boolean(o);
+  if (i === Number)
+    return Number(o);
+  return o;
+}
+function l(o, { props: i = {}, attrs: c = [], styles: g = "", template: d, onRender: m = null }) {
+  let u = ["props", ...c];
+
+  class f extends HTMLElement {
+    static observedAttributes = u;
+    constructor() {
+      super();
+      this.attachShadow({ mode: "open" }), this._cleanup = null;
+    }
+    connectedCallback() {
+      this._render();
+    }
+    disconnectedCallback() {
+      if (typeof this._cleanup === "function")
+        this._cleanup();
+      this._cleanup = null;
+    }
+    attributeChangedCallback() {
+      if (this.isConnected)
+        this._render();
+    }
+    _getProps() {
+      let n = {}, r = this.getAttribute("props");
+      if (r)
+        try {
+          n = JSON.parse(r);
+        } catch {
+          n = {};
+        }
+      let s = {};
+      for (let p of Object.keys(i))
+        s[p] = y(n[p], i[p]);
+      return s;
+    }
+    _applyForwardedAttrs() {
+      if (c.length === 0)
+        return;
+      let n = this.shadowRoot.querySelector("[data-forward]");
+      if (!n)
+        return;
+      for (let r of c)
+        if (this.hasAttribute(r))
+          n.setAttribute(r, this.getAttribute(r));
+        else
+          n.removeAttribute(r);
+    }
+    _render() {
+      if (typeof this._cleanup === "function")
+        this._cleanup(), this._cleanup = null;
+      let n = this._getProps(), r = typeof d === "function" ? d(n) : d;
+      if (this.shadowRoot.innerHTML = `<style>${g}</style>${r}`, this._applyForwardedAttrs(), m) {
+        let s = m(this.shadowRoot, n, this);
+        if (typeof s === "function")
+          this._cleanup = s;
+      }
+    }
+  }
+  customElements.define(o, f);
+}
+
+// story-map/scripts/breakpoints.js
+var t = "640px", a = "1280px";
+
+// story-map/scripts/hero.js
+var v = `
+  :host {
+    display: flex;
+    justify-content: center;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: var(--size-display);
+    margin-bottom: 1rem;
+  }
+
+  section {
+    text-align: center;
+    padding-top: 50%;
+
+    @media (min-width: ${t}) {
+      padding: 0;
+    }
+  }
+
+  p {
+    margin: 0;
+    margin-bottom: 3rem;
+  }
+
+  a {
+    display: inline-block;
+    color: var(--color-text);
+    text-decoration: none;
+    border: 1px solid var(--color-text);
+    padding: 1rem 3rem;
+    width: fit-content;
+    background: #534805;
+    color: #d4cfb1;
+  }
+
+  a span {
+    display: none;
+    @media (min-width: ${t}) {
+      display: inline;
+    }
+  }
+
+  a img {
+    width: 1.6rem;
+
+    @media (min-width: ${t}) {
+      display: none;
+    }
+  }
+
+  h2 {
+    margin: 0;
+    margin-top: 3rem;
+    margin-bottom: 1.2rem;
+    font-size: var(--size-small);
+
+    @media (min-width: ${t}) {
+      display: none;
+    }
+  }
+
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    
+    @media (min-width: ${t}) {
+      padding: 0 0 12rem;      /* space so the pole is longer than the lowest sign */
+      align-items: center;
+      flex-direction: column;
+      position: absolute;
+      left: 5rem;
+      bottom: 5rem;
+    }
+  }
+
+
+  ul li {
+    display: inline-block;
+    margin-inline: 1rem;
+    
+    @media (min-width: ${t}) {
+      display: block;
+      position: relative;
+      margin-block: 1rem;
+      z-index: 2;
+      min-width: 140px;
+      padding: 1rem 3.6rem;
+      background: var(--color-bg-primary);
+      background: #ab9f64;
+      
+      text-align: center;
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+    }
+  }
+
+  @media (min-width: ${t}) {
+    /* the pole, running from the top down to the road */
+    ul::before {
+      content: "";
+      position: absolute;
+      top: -10px;
+      bottom: 0;
+      left: 50%;
+      width: 8px;
+      transform: translateX(-50%);
+      background: #534805;
+      z-index: 1;
+    }
+    
+
+  /* right-pointing arrow outline */
+    ul li:nth-child(odd) {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40' preserveAspectRatio='none'%3E%3Cpolygon points='1,1 88,1 99,20 88,39 1,39' fill='none' stroke='#ab9f64' stroke-width='1' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+      clip-path: polygon(0 0, 88% 0, 100% 50%, 88% 100%, 0 100%);
+    }
+    
+    /* left-pointing arrow outline */
+    ul li:nth-child(even) {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40' preserveAspectRatio='none'%3E%3Cpolygon points='12,1 99,1 99,39 12,39 1,20' fill='none' stroke='#ab9f64' stroke-width='1' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+      clip-path: polygon(12% 0, 100% 0, 100% 100%, 12% 100%, 0 50%);
+
+    }
+  }
+
+
+  li a {
+    padding: 0;
+    border: none;
+    display: block;
+    width: 100%;
+    font-size: var(--size-small);
+    font-weight: var(--font-bold);
+    background: none;
+    color: #2c2100;
+  }
+
+  hgroup {
+    @media (min-width: ${t}) {
+      padding-top: 50%;
+    }
+
+    @media (min-width: ${a}) {
+      padding-top: 70%;
+    }
+  }
+
+`, k = `
+  <section>
+    <hgroup>
+      <h1>Stoory Map</h1>
+      <p>Turn your memories into a map</p>
+      <a href="/juzbird">Preview</a>
+    </hgroup>
+
+    <h2>Contact on:</h2>
+    <ul>
+      <li><a href="https://wa.me/message/DVOPVSAGBDENB1" target="_blank"><span> Whatsapp</span>
+        <img src=./assets/images/whatsapp.svg alt="Whatsapp">
+      </a></li>
+      <li><a href="https://www.instagram.com/crafted.han" target="_blank"> <span>Instagram</span>
+        <img src=./assets/images/instagram.svg alt="Instagram">
+      </a></li>
+    </ul>
+  </section>
+`;
+l("section-hero", { styles: v, template: k });
+
+// story-map/scripts/background-photos.js
+var x = `
+  :host {
+    display: block;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+    position: absolute;
+    opacity: 0.9;
+  }  
+
+  .boat {
+    /* width: 10rem;
+    right: 5%;
+    bottom: 10%; */
+    display: none;
+
+    @media (min-width: ${t}) {
+      display: block;
+      width: 20rem;
+
+      right: 5%;
+      top: 5%;
+    }
+  }
+
+
+  .potato {
+    display: none;
+
+    @media (min-width: ${t}) {
+      display: block;
+      width: 5rem; 
+      top: 5%;
+      left: 7%;
+    }
+
+  }
+
+  .potato-man-head {
+    width: 20rem;
+    bottom: 0%;
+    left: 10%;
+
+    @media (min-width: ${t}) {
+      display: none;
+    }
+  }
+
+  .hat {
+    width: 5rem;
+    top: 10%;
+    left: 45%;
+
+    @media (min-width: ${t}) {
+      top: 7%;
+      left: 50%;
+    }
+
+    @media(min-width: ${a}) {
+      width: 6rem;
+      top: 10%;
+      left: 55%;
+    }
+  }
+
+  .guinness {
+    width: 4rem;
+    top: 3rem;
+    left: 88%;
+
+    @media (min-width: ${t}) {
+        top: 35%;
+        left: 15%;
+    }
+
+    @media (min-width: ${a}) {
+        top: 45%;
+        left: 12%;
+    }
+  }
+
+  
+
+  .horse {
+    display: none;
+
+    @media (min-width: ${t}) {
+        display: block;
+        width: 15rem;
+
+        right: 10%;
+        top: 42%;
+    }
+  }
+
+  .footballer {
+    width: 8rem;
+    top: 3%;
+    left: 3%;
+
+    @media (min-width: ${t}) {
+      display: none;
+    }
+  }
+
+  .beer {
+      top: 58%;
+      left: 2%;
+      width: 4.5rem;
+      
+      @media (min-width: ${t}) {
+        width: 5rem;
+        left: 35%;
+        top: 5%;
+    }
+  }
+
+  .flower {
+    width: 7rem;
+    bottom: 5%;
+    right: 5%;
+
+
+    @media (min-width: ${t}) {
+      display: none;
+    }
+
+
+    @media (min-width: ${a}) {
+      display: block;
+        width: 7rem;
+        left: auto;
+        top: 20%;
+        right: 25%;
+    }
+  }
+
+  .penguins {
+    width: 10rem;
+    top: 45%;
+    left: 80%;
+
+    @media (min-width: ${t}) {
+        width: 12rem;
+        left: 25%;
+
+    }
+    
+    @media (min-width: ${a}) {
+        top: 35%;
+        left: 25%;
+    }
+
+  }
+
+  li img {
+    position: static;
+  }
+
+  ul {
+    display: none;
+    
+    @media (min-width: ${t}) {
+      position: absolute;
+      bottom: 1rem;
+      left: 30rem;
+      width: 70%;
+      overflow-x: scroll;
+      display: flex;
+      align-items: end;
+      list-style: none;
+      gap: 10rem;
+      padding: 0;
+      padding-bottom: 1rem;
+
+      &::-webkit-scrollbar {
+        height: 2.5rem;
+      }
+
+      /* track: empty, so only the road (the thumb) is visible */
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      /* thumb: the draggable part is the road image */
+      &::-webkit-scrollbar-thumb {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='139' height='100' viewBox='0 0 139 100' fill='%23181818' fill-rule='evenodd'%3E%3Cpath d='M0 49C10.76 49 14.16 49.45 14.5 50C14.89 50.63 12.34 51 7.56 51H0V49Z'/%3E%3Cpath d='M0 82H139V84H0V82Z'/%3E%3Cpath d='M0 97L139 98V99H0V97Z'/%3E%3Cpath d='M45 50.18C45 51.46 41.32 52.04 35.9 51.61C28 51 29.31 49.5 37.75 49.5C41.74 49.5 45 49.81 45 50.18Z'/%3E%3Cpath d='M75.68 49.48C75.49 50.04 71.55 50.63 66.93 50.79C61.61 50.98 58.88 50.74 59.51 50.14C60.91 48.8 76.11 48.18 75.68 49.48Z'/%3E%3Cpath d='M108 49.73C108 51.19 94.02 52.42 92.67 51.07C91.91 50.31 92.45 50 94.55 49.99C96.17 49.99 99.86 49.7 102.75 49.35C106.03 48.96 108 49.1 108 49.73Z'/%3E%3Cpath d='M139 51C125.9 52.05 123 51.92 123 51.29C123 50.74 126.6 50 131 49.64L139 49V51Z'/%3E%3Cpath d='M0 2C114.33 2 138 2.34 138 3C138 3.66 114.33 4 69 4H0V2Z'/%3E%3Cpath d='M0 16H139V18H0V16Z'/%3E%3C/svg%3E");
+        background-repeat: repeat-x;
+        background-size: auto 100%;
+        background-position: left center;
+      }
+    }
+  }
+
+   .asiatique {
+    width: 22rem;
+
+    @media (min-width: ${a}) {    
+        width: 30rem;
+    }
+  }
+
+  .il-juice-bar {
+    width: 14rem;
+  }
+
+  .fruit-shop {
+    width: 12rem;
+  }
+
+  .noon-old-town {
+    width: 16rem;
+
+
+    @media (min-width: ${a}) {    
+        width: 22rem;
+    }
+  }
+
+  .sun-rays-cafe {
+    width: 10rem;
+  }
+
+`, z = `
+  <section>
+    <ul>
+        <li>
+            <img class="asiatique" src=${e("./assets/images/asiatique.png")} alt="Asiatique">
+        </li>
+
+        <li>
+            <img class="fruit-shop" src=${e("./assets/images/fruit-shop.png")} alt="Fruit shops">
+        </li>
+        
+        <li>
+            <img class="il-juice-bar" src=${e("./assets/images/il-juice-bar.png")} alt="Il Juice Bar">
+        </li>
+        
+        <li>
+            <img class="noon-old-town" src=${e("./assets/images/noon-old-town.png")} alt="Noon old town">
+        </li>
+        <li>
+            <img class="sun-rays-cafe" src=${e("./assets/images/sun-rays-cafe.png")} alt="Sun Rays Cafe">
+        </li>
+    </ul>
+
+    <img class="boat" src=${e("./assets/images/boat-ayutthaya.png")} alt="Boat">
+    <img class="footballer" src=${e("./assets/images/footballer.png")} alt="Footerballer">
+    <img class="potato-man-head" src=${e("./assets/images/potato-man-head.png")} alt="Potato Man Head">
+    <img class="beer" src=${e("./assets/images/breezer-beer.png")} alt="Beer">
+    <img class="guinness" src=${e("./assets/images/guinness.png")} alt="Guinness">
+    <img class="hat" src=${e("./assets/images/green-hat.png")} alt="Hat">
+    <img class="horse" src=${e("./assets/images/horse-ride.png")} alt="Horse ride">
+    <img class="potato" src=${e("./assets/images/potato-man.png")} alt="Potato man">
+    <img class="flower" src=${e("./assets/images/flowers-sg.png")} alt="Flowers">
+    <img class="penguins" src=${e("./assets/images/penguins.png")} alt="Penguins">
+  </section>
+`;
+l("section-background-photos", { styles: x, template: z });
+</script></body>
 </html>
