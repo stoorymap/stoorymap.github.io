@@ -45,7 +45,7 @@ function A() {
 }
 window.addEventListener("resize", A);
 window.addEventListener("load", A);
-var g = [];
+var d = [];
 function T(t) {
   let o = u.getBoundingClientRect();
   return [
@@ -56,13 +56,13 @@ function T(t) {
 u.addEventListener("click", (t) => {
   if (!t.shiftKey)
     return;
-  g.push(T(t)), console.log(`${g.length} points`, g[g.length - 1]);
+  d.push(T(t)), console.log(`${d.length} points`, d[d.length - 1]);
 });
 addEventListener("keydown", (t) => {
-  if (t.key === "Enter" && g.length)
-    console.log(JSON.stringify(g)), g.length = 0;
-  else if (t.key === "Backspace" && g.length)
-    g.pop(), console.log(`${g.length} points`);
+  if (t.key === "Enter" && d.length)
+    console.log(JSON.stringify(d)), d.length = 0;
+  else if (t.key === "Backspace" && d.length)
+    d.pop(), console.log(`${d.length} points`);
 });
 
 // story-map/moe-lay/scripts/assets.js
@@ -419,7 +419,7 @@ var E = [
       [4241, 2080]
     ],
     type: "fill",
-    color: "#6cc6be"
+    color: "#9caee0"
   },
   {
     points: [
@@ -436,7 +436,7 @@ var E = [
       [4565, 595]
     ],
     type: "fill",
-    color: "#6cc6be"
+    color: "#99abdc"
   },
   {
     points: [
@@ -458,7 +458,7 @@ var E = [
       [3559, -1848]
     ],
     type: "fill",
-    color: "#6cc6be"
+    color: "#99abdc"
   },
   {
     points: [
@@ -869,25 +869,25 @@ u.addEventListener("wheel", (t) => {
   let o = u.getBoundingClientRect(), e = t.clientX - o.left, l = t.clientY - o.top, h = t.deltaY < 0 ? 1.1 : 0.9;
   M(e, l, h);
 }, { passive: !1 });
-var d = null, j = null, W = 1;
+var g = null, j = null, W = 1;
 u.addEventListener("touchstart", (t) => {
   if (t.touches.length === 1)
-    d = { x: t.touches[0].clientX, y: t.touches[0].clientY };
+    g = { x: t.touches[0].clientX, y: t.touches[0].clientY };
   else if (t.touches.length === 2)
-    d = null, j = D(t.touches), W = n.zoom;
+    g = null, j = D(t.touches), W = n.zoom;
 });
 u.addEventListener("touchmove", (t) => {
-  if (t.preventDefault(), t.touches.length === 1 && d) {
+  if (t.preventDefault(), t.touches.length === 1 && g) {
     let o = t.touches[0];
-    n.x += o.clientX - d.x, n.y += o.clientY - d.y, d = { x: o.clientX, y: o.clientY }, w();
+    n.x += o.clientX - g.x, n.y += o.clientY - g.y, g = { x: o.clientX, y: o.clientY }, w();
   } else if (t.touches.length === 2) {
     let o = D(t.touches), e = u.getBoundingClientRect(), l = (t.touches[0].clientX + t.touches[1].clientX) / 2 - e.left, h = (t.touches[0].clientY + t.touches[1].clientY) / 2 - e.top, r = W * (o / j) / n.zoom;
     M(l, h, r);
   }
 }, { passive: !1 });
 u.addEventListener("touchend", (t) => {
-  if (d = null, j = null, t.touches.length === 1)
-    d = { x: t.touches[0].clientX, y: t.touches[0].clientY };
+  if (g = null, j = null, t.touches.length === 1)
+    g = { x: t.touches[0].clientX, y: t.touches[0].clientY };
 });
 function D(t) {
   let o = t[0].clientX - t[1].clientX, e = t[0].clientY - t[1].clientY;
