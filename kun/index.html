@@ -12,7 +12,7 @@
         padding: 0;
         width: 100%;
         height: 100%;
-        background: #eae5ce;
+        background: #dcf5f6;
         overflow: hidden;
       }
       canvas {
@@ -26,234 +26,494 @@
         cursor: grabbing;
       }
     </style>
+    <script>
+      window.process = { env: { NODE_ENV: "development" } };
+    </script>
   </head>
   <body>
     <canvas id="c"></canvas>
 
     
-  <script type="module">// story-map/kun/scripts/main.js
-var h = document.getElementById("c"), c = h.getContext("2d");
-function C() {
-  let o = window.devicePixelRatio || 1, n = 4096, t = 16777216, s = Math.min(o, 4096 / window.innerWidth, 4096 / window.innerHeight), u = window.innerWidth * s * window.innerHeight * s;
-  if (u > 16777216)
-    s *= Math.sqrt(16777216 / u);
-  h.width = Math.floor(window.innerWidth * s), h.height = Math.floor(window.innerHeight * s), h.style.width = window.innerWidth + "px", h.style.height = window.innerHeight + "px", c.setTransform(s, 0, 0, s, 0, 0), c.imageSmoothingEnabled = !0, c.imageSmoothingQuality = "high", g();
-}
-window.addEventListener("resize", C);
-window.addEventListener("load", C);
+  <script type="module">// story-map/kun/scripts/scene.json
+var v = {
+  roadInstructions: [],
+  roadPoints: [
+    [0, 400],
+    [384, 400],
+    [639, 383],
+    [809, 296],
+    [945, 161],
+    [1037, -45],
+    [1116, -393],
+    [1193, -549],
+    [1342, -668],
+    [1601, -739],
+    [2087, -741],
+    [2385, -684],
+    [2611, -476],
+    [2699, -9],
+    [2757, 1308],
+    [2394, 2232]
+  ],
+  sceneEmbeds: [],
+  sceneObjects: [
+    {
+      name: "jet-ski",
+      x: 790,
+      y: 433,
+      height: 200
+    },
+    {
+      name: "leo-beer",
+      x: 1266,
+      y: 135,
+      height: 147
+    },
+    {
+      name: "noon-old-town",
+      x: 1545,
+      y: -587,
+      height: 600
+    },
+    {
+      name: "footballer",
+      x: 30,
+      y: -38,
+      height: 355
+    },
+    {
+      name: "lobster",
+      x: 319,
+      y: -19,
+      height: 343
+    }
+  ],
+  terrainZones: [
+    {
+      points: [
+        [1124, -459],
+        [1052, -70],
+        [772, 334],
+        [-41, 488],
+        [55, 1454],
+        [1236, 1564],
+        [2193, 2252],
+        [2696, 1371],
+        [2665, -275],
+        [2194, -727],
+        [1336, -665]
+      ],
+      type: "fill",
+      color: "oklch(0.955 0.11 129)"
+    },
+    {
+      points: [
+        [812, 516],
+        [1168, 499],
+        [1425, 538],
+        [1451, 682],
+        [1220, 771],
+        [976, 807],
+        [688, 705],
+        [479, 629],
+        [595, 538]
+      ],
+      type: "fill",
+      color: "oklch(0.872 0.11 254)"
+    },
+    {
+      points: [
+        [394, 448],
+        [181, 919],
+        [677, 963],
+        [1113, 1029],
+        [1106, 800]
+      ],
+      type: "line",
+      color: "oklch(0.9 0.038 136.8)",
+      width: 15
+    },
+    {
+      points: [
+        [1817, -8],
+        [1745, 573],
+        [1805, 959],
+        [1316, 1103],
+        [1049, 1036]
+      ],
+      type: "line",
+      color: "oklch(0.9 0.038 136.8)",
+      width: 15
+    }
+  ]
+};
 
-// story-map/kun/scripts/assets.js
-var D = "png", q = {}, M = {}, Z = {};
-function X(o, n = D) {
-  if (q[o])
-    return q[o];
-  let t = new Image;
-  q[o] = t, M[o] = !1;
-  let s = o.replace(/_/g, "-");
-  return t.onerror = () => console.warn(`Failed to load assets/${s}.${n}`), t.onload = () => {
-    if (M[o] = !0, Z[o])
-      Z[o]();
-    g();
-  }, t.src = `assets/${s}.${n}`, t;
+// map/scripts/main.js
+var Z = document.getElementById("c"), L = Z.getContext("2d");
+function s() {
+  let o = window.devicePixelRatio || 1, l = 4096, $ = 16777216, u = Math.min(o, 4096 / window.innerWidth, 4096 / window.innerHeight), f = window.innerWidth * u * window.innerHeight * u;
+  if (f > 16777216)
+    u *= Math.sqrt(16777216 / f);
+  Z.width = Math.floor(window.innerWidth * u), Z.height = Math.floor(window.innerHeight * u), Z.style.width = window.innerWidth + "px", Z.style.height = window.innerHeight + "px", L.setTransform(u, 0, 0, u, 0, 0), L.imageSmoothingEnabled = !0, L.imageSmoothingQuality = "low", V();
 }
-function B(o) {
-  return !!M[o];
+window.addEventListener("resize", s);
+window.addEventListener("load", s);
+
+// map/scripts/assets.js
+var Zo = "png", R = {}, j = {}, h = {};
+function D(o, l = Zo) {
+  if (R[o])
+    return R[o];
+  let $ = new Image;
+  R[o] = $, j[o] = !1;
+  let u = o.replace(/_/g, "-");
+  return $.onerror = () => console.warn(`Failed to load assets/${u}.${l}`), $.onload = () => {
+    if (j[o] = !0, h[o])
+      h[o]();
+    V();
+  }, $.src = `assets/${u}.${l}`, $;
 }
-function F(o, n) {
-  Z[o] = n;
+function P(o) {
+  return !!j[o];
+}
+function i(o, l) {
+  h[o] = l;
 }
 
-// story-map/kun/scripts/road.js
-var x = [];
-function G(o) {
-  x = o;
+// map/scripts/road.js
+var E = [];
+function p(o) {
+  E = o;
 }
-function J(o, n, t, s, u) {
-  let i = [{ x: o, y: n, curve: !1 }], d = 0;
-  for (let $ of u)
-    if ($.straight)
-      for (let y = 0;y < $.straight; y++) {
-        let r = i[i.length - 1];
-        i.push({
-          x: r.x + Math.cos(d) * t,
-          y: r.y + Math.sin(d) * t,
+function c(o, l, $, u, f) {
+  let Y = [{ x: o, y: l, curve: !1 }], X = 0;
+  for (let M of f)
+    if (M.straight)
+      for (let k = 0;k < M.straight; k++) {
+        let B = Y[Y.length - 1];
+        Y.push({
+          x: B.x + Math.cos(X) * $,
+          y: B.y + Math.sin(X) * $,
           curve: !1
         });
       }
-    else if ($.curve) {
-      let r = $.curve * Math.PI / 180 / 14;
-      for (let Q = 0;Q < 14; Q++) {
-        d += r;
-        let A = i[i.length - 1];
-        i.push({
-          x: A.x + Math.cos(d) * s,
-          y: A.y + Math.sin(d) * s,
+    else if (M.curve) {
+      let B = M.curve * Math.PI / 180 / 14;
+      for (let N = 0;N < 14; N++) {
+        X += B;
+        let G = Y[Y.length - 1];
+        Y.push({
+          x: G.x + Math.cos(X) * u,
+          y: G.y + Math.sin(X) * u,
           curve: !0
         });
       }
     }
-  return i;
+  return Y;
 }
-
-// story-map/kun/scripts/scene.js
-var b = [
-  { straight: 4 },
-  { curve: -90 },
-  { curve: 90 },
-  { straight: 4 },
-  { curve: 90 },
-  { straight: 8 },
-  { straight: 4 }
-], W = [
-  { name: "jet-ski", x: 800, y: 280, height: 200 },
-  { name: "leo-beer", x: 700, y: 120, height: 100 },
-  { name: "noon-old-town", x: 1200, y: -600, height: 600 }
-], I = [];
-function K(o) {
-  for (let { name: n, x: t, y: s, height: u } of W) {
-    if (t + u < o.left || t - u > o.right || s + u < o.top || s - u > o.bottom)
-      continue;
-    T(n, t, s, u);
+var No = 0.03;
+function Lo(o, l = 0.5) {
+  let $ = o.length, u = (X) => o[Math.max(0, Math.min($ - 1, X))], f = l / 3, Y = [{ x: o[0][0], y: o[0][1], s: 0 }];
+  for (let X = 0;X < $ - 1; X++) {
+    let M = u(X - 1), k = u(X), B = u(X + 1), N = u(X + 2), G = k[0] + (B[0] - M[0]) * f, y = k[1] + (B[1] - M[1]) * f, W = B[0] - (N[0] - k[0]) * f, C = B[1] - (N[1] - k[1]) * f, U = Math.max(8, Math.ceil(Math.hypot(B[0] - k[0], B[1] - k[1]) / 10));
+    for (let F = 1;F <= U; F++) {
+      let Q = F / U, O = 1 - Q, r = O * O * O * k[0] + 3 * O * O * Q * G + 3 * O * Q * Q * W + Q * Q * Q * B[0], d = O * O * O * k[1] + 3 * O * O * Q * y + 3 * O * Q * Q * C + Q * Q * Q * B[1], z = Y[Y.length - 1];
+      Y.push({ x: r, y: d, s: z.s + Math.hypot(r - z.x, d - z.y) });
+    }
   }
+  return Y;
+}
+function Oo(o, l) {
+  let $ = 0, u = o.length - 1;
+  while (u - $ > 1) {
+    let M = $ + u >> 1;
+    if (o[M].s <= l)
+      $ = M;
+    else
+      u = M;
+  }
+  let f = o[$], Y = o[u], X = Math.min(1, Math.max(0, (l - f.s) / (Y.s - f.s || 1)));
+  return { x: f.x + (Y.x - f.x) * X, y: f.y + (Y.y - f.y) * X };
+}
+function e(o, l, $) {
+  if (o.length < 2)
+    return [];
+  let u = [{ x: o[0][0], y: o[0][1], curve: !1 }];
+  if (!(l > 0 && $ > 0))
+    return u;
+  let f = Lo(o), Y = f[f.length - 1].s, X = (N) => Oo(f, Math.min(Y, Math.max(0, N))), M = l / 2, k = (N) => {
+    let G = X(N - M), y = X(N), W = X(N + M), C = y.x - G.x, U = y.y - G.y, F = W.x - y.x, Q = W.y - y.y;
+    if (Math.hypot(C, U) < 0.000001 || Math.hypot(F, Q) < 0.000001)
+      return 0;
+    let O = Math.atan2(Q, F) - Math.atan2(U, C);
+    while (O > Math.PI)
+      O -= 2 * Math.PI;
+    while (O < -Math.PI)
+      O += 2 * Math.PI;
+    return Math.abs(O);
+  }, B = 0;
+  for (;; ) {
+    let N = k(B) > No;
+    if (B += N ? $ : l, B > Y)
+      break;
+    let G = X(B);
+    u.push({ x: G.x, y: G.y, curve: N });
+  }
+  return u;
 }
 
-// story-map/kun/scripts/embeds.js
-var V = 600, m = 175, z = null, U = /* @__PURE__ */ new Map;
-function j() {
-  if (z)
-    return z;
-  return z = document.createElement("div"), z.id = "embed-layer", Object.assign(z.style, {
+// map/scripts/camera.js
+var q = { x: 500, y: 400, zoom: 0.3 }, Qo = 0.1, Go = 5, H = !1;
+function T() {
+  if (H)
+    return;
+  H = !0, requestAnimationFrame(() => {
+    H = !1, V();
+  });
+}
+function x(o, l, $) {
+  let u = Math.min(Go, Math.max(Qo, q.zoom * $)), f = (o - q.x) / q.zoom, Y = (l - q.y) / q.zoom;
+  q.zoom = u, q.x = o - f * q.zoom, q.y = l - Y * q.zoom, T();
+}
+
+// map/scripts/embeds.js
+var oo = 300, lo = 300, K = null, a = /* @__PURE__ */ new Map;
+function Jo() {
+  if (K)
+    return K;
+  return K = document.createElement("div"), K.id = "embed-layer", Object.assign(K.style, {
     position: "fixed",
     inset: "0",
     overflow: "hidden",
     pointerEvents: "none",
     zIndex: "10"
-  }), document.body.appendChild(z), z;
+  }), document.body.appendChild(K), K;
 }
-function P(o) {
-  let n = document.createElement("div");
-  Object.assign(n.style, {
+function _o(o) {
+  let l = document.createElement("div");
+  Object.assign(l.style, {
     position: "absolute",
     top: "0",
     left: "0",
-    width: (o.width ?? V) + "px",
-    height: (o.height ?? m) + "px",
+    width: (o.width ?? oo) + "px",
+    height: (o.height ?? lo) + "px",
     transformOrigin: "top left",
     pointerEvents: "auto"
   });
-  let t = document.createElement("iframe");
-  return t.width = "100%", t.height = "100%", t.scrolling = "no", t.frameBorder = "no", t.allow = "autoplay; encrypted-media", t.loading = "lazy", t.src = o.src, n.appendChild(t), j().appendChild(n), n;
+  let $ = document.createElement("iframe");
+  return $.width = "100%", $.height = "100%", $.scrolling = "no", $.frameBorder = "no", $.allow = "autoplay; encrypted-media", $.loading = "lazy", $.src = o.src, l.appendChild($), Jo().appendChild(l), l;
 }
-function v() {
-  let { innerWidth: o, innerHeight: n } = window;
-  for (let t of I) {
-    let s = t.x * l.zoom + l.x, u = t.y * l.zoom + l.y, i = (t.width ?? V) * l.zoom, d = (t.height ?? m) * l.zoom, $ = s + i < 0 || s > o || u + d < 0 || u > n, y = U.get(t);
-    if ($) {
-      if (y)
-        y.style.display = "none";
+function $o() {
+  let { innerWidth: o, innerHeight: l } = window;
+  for (let $ of m) {
+    let u = $.x * q.zoom + q.x, f = $.y * q.zoom + q.y, Y = ($.width ?? oo) * q.zoom, X = ($.height ?? lo) * q.zoom, M = u + Y < 0 || u > o || f + X < 0 || f > l, k = a.get($);
+    if (M) {
+      if (k)
+        k.style.display = "none";
       continue;
     }
-    if (!y)
-      y = P(t), U.set(t, y);
-    y.style.display = "", y.style.transform = `translate(${s}px, ${u}px) scale(${l.zoom})`;
+    if (!k)
+      k = _o($), a.set($, k);
+    k.style.display = "", k.style.transform = `translate(${u}px, ${f}px) scale(${q.zoom})`;
   }
 }
 
-// story-map/kun/scripts/draw.js
-function H(o = 0) {
-  let n = h.clientWidth, t = h.clientHeight;
+// map/scripts/terrain.js
+function Ko(o) {
+  let l = o.points.map((f) => f[0]), $ = o.points.map((f) => f[1]), u = (o.type === "line" ? (o.width || 0) / 2 : (o.borderWidth || 0) / 2) + 200;
   return {
-    left: -l.x / l.zoom - o,
-    top: -l.y / l.zoom - o,
-    right: (n - l.x) / l.zoom + o,
-    bottom: (t - l.y) / l.zoom + o
+    l: Math.min(...l) - u,
+    t: Math.min(...$) - u,
+    r: Math.max(...l) + u,
+    b: Math.max(...$) + u
   };
 }
-function g() {
-  c.clearRect(0, 0, h.width, h.height), c.save(), c.translate(l.x, l.y), c.scale(l.zoom, l.zoom), c.imageSmoothingEnabled = l.zoom < 2;
-  let o = H(400);
-  S(o), K(o), c.restore(), v();
-}
-function T(o, n, t, s) {
-  let u = X(o);
-  if (!B(o))
-    return;
-  let i = s / u.naturalHeight, d = u.naturalWidth * i;
-  c.drawImage(u, n, t, d, s);
-}
-function S(o) {
-  let n = X("road", "svg");
-  if (!B("road"))
-    return;
-  for (let t = 0;t < x.length - 1; t++) {
-    let s = x[t], u = x[t + 1], i = (s.x + u.x) / 2, d = (s.y + u.y) / 2;
-    if (i < o.left || i > o.right || d < o.top || d > o.bottom)
-      continue;
-    let $ = Math.atan2(u.y - s.y, u.x - s.x), y = u.curve ? n.width * 0.5 : n.width, r = n.height;
-    c.save(), c.translate(i, d), c.rotate($), c.drawImage(n, -y / 2, -r / 2, y, r), c.restore();
+function yo(o, l = 0.5, $ = L) {
+  let u = o.length, f = (X) => o[Math.max(0, Math.min(u - 1, X))], Y = l / 3;
+  $.moveTo(o[0][0], o[0][1]);
+  for (let X = 0;X < u - 1; X++) {
+    let M = f(X - 1), k = f(X), B = f(X + 1), N = f(X + 2);
+    $.bezierCurveTo(k[0] + (B[0] - M[0]) * Y, k[1] + (B[1] - M[1]) * Y, B[0] - (N[0] - k[0]) * Y, B[1] - (N[1] - k[1]) * Y, B[0], B[1]);
   }
 }
-function p() {
-  let n = X("road", "svg").width * 0.92, t = n * 0.5;
-  G(J(0, 400, n, t, b));
+function S(o, l = L) {
+  for (let $ of I) {
+    if (!$.points || $.points.length < 2)
+      continue;
+    let u = Ko($);
+    if (u.r < o.left || u.l > o.right || u.b < o.top || u.t > o.bottom)
+      continue;
+    if (l.beginPath(), yo($.points, $.tension, l), $.type === "fill") {
+      if (l.fillStyle = $.color, l.fill(), $.border)
+        l.closePath(), l.lineJoin = "round", l.setLineDash($.borderDash || []), l.strokeStyle = $.border, l.lineWidth = $.borderWidth || 10, l.stroke(), l.setLineDash([]);
+    } else if ($.type === "line")
+      l.lineCap = "round", l.lineJoin = "round", l.setLineDash($.dash || []), l.strokeStyle = $.color, l.lineWidth = $.width || 15, l.stroke(), l.setLineDash([]);
+  }
 }
-F("road", p);
 
-// story-map/kun/scripts/camera.js
-var l = { x: 500, y: 400, zoom: 0.3 }, e = 0.1, a = 5, O = !1;
-function Y() {
-  if (O)
+// map/scripts/overlays.js
+var uo = [];
+
+// map/scripts/draw.js
+function Fo(o = 0) {
+  let l = Z.clientWidth, $ = Z.clientHeight;
+  return {
+    left: -q.x / q.zoom - o,
+    top: -q.y / q.zoom - o,
+    right: (l - q.x) / q.zoom + o,
+    bottom: ($ - q.y) / q.zoom + o,
+    zoom: q.zoom,
+    density: q.zoom * (Z.width / (Z.clientWidth || 1))
+  };
+}
+var Vo = 8000000, Uo = 1, J = null;
+function Eo() {
+  let o = 1 / 0, l = 1 / 0, $ = -1 / 0, u = -1 / 0, f = (X, M) => {
+    if (X < o)
+      o = X;
+    if (X > $)
+      $ = X;
+    if (M < l)
+      l = M;
+    if (M > u)
+      u = M;
+  };
+  for (let X of I)
+    for (let [M, k] of X.points || [])
+      f(M, k);
+  if (o === 1 / 0)
+    return null;
+  let Y = 400;
+  return { l: o - Y, t: l - Y, r: $ + Y, b: u + Y };
+}
+function Io() {
+  let o = Eo();
+  if (!o)
     return;
-  O = !0, requestAnimationFrame(() => {
-    O = !1, g();
-  });
+  let l = o.r - o.l, $ = o.b - o.t, u = Math.min(1, Math.sqrt(Vo / (l * $)), 4096 / Math.max(l, $)), f = document.createElement("canvas");
+  f.width = Math.ceil(l * u), f.height = Math.ceil($ * u);
+  let Y = f.getContext("2d");
+  Y.imageSmoothingQuality = "high", Y.scale(u, u), Y.translate(-o.l, -o.t);
+  let X = { left: o.l, top: o.t, right: o.r, bottom: o.b, zoom: u };
+  S(X, Y), J = {
+    canvas: f,
+    x: o.l,
+    y: o.t,
+    w: f.width / u,
+    h: f.height / u,
+    scale: u
+  };
 }
-function k(o, n, t) {
-  let s = Math.min(a, Math.max(e, l.zoom * t)), u = (o - l.x) / l.zoom, i = (n - l.y) / l.zoom;
-  l.zoom = s, l.x = o - u * l.zoom, l.y = n - i * l.zoom, Y();
+function Wo(o) {
+  let l = document.body.classList.contains("dev-design");
+  if (l || q.zoom > 1.5)
+    J = null;
+  if (!J && !l && q.zoom <= 0.4)
+    Io();
+  let $ = q.zoom * (Z.width / (Z.clientWidth || 1));
+  if (J && $ <= J.scale * Uo)
+    L.drawImage(J.canvas, J.x, J.y, J.w, J.h);
+  else
+    S(o);
+  Co(o);
+}
+function V() {
+  L.save(), L.setTransform(1, 0, 0, 1, 0, 0), L.clearRect(0, 0, Z.width, Z.height), L.restore(), L.save(), L.translate(q.x, q.y), L.scale(q.zoom, q.zoom), L.imageSmoothingEnabled = q.zoom < 2;
+  let o = Fo(400);
+  Wo(o), Xo(o);
+  for (let l of uo)
+    l(L);
+  L.restore(), $o();
+}
+function fo(o, l, $, u, f = L) {
+  let Y = D(o);
+  if (!P(o))
+    return !1;
+  let X = u / Y.naturalHeight, M = Y.naturalWidth * X;
+  return f.drawImage(Y, l, $, M, u), !0;
+}
+function Co(o, l = L) {
+  let $ = D("road", "svg");
+  if (!P("road"))
+    return;
+  for (let u = 0;u < E.length - 1; u++) {
+    let f = E[u], Y = E[u + 1], X = (f.x + Y.x) / 2, M = (f.y + Y.y) / 2;
+    if (X < o.left || X > o.right || M < o.top || M > o.bottom)
+      continue;
+    let k = Math.atan2(Y.y - f.y, Y.x - f.x), B = Y.curve ? $.width * 0.5 : $.width, N = $.height;
+    l.save(), l.translate(X, M), l.rotate(k), l.drawImage($, -B / 2, -N / 2, B, N), l.restore();
+  }
+}
+function Do() {
+  let l = D("road", "svg").width * 0.92, $ = l * 0.5;
+  p(A.length >= 2 ? e(A, l, $) : c(0, 400, l, $, n));
+}
+i("road", Do);
+
+// map/scripts/scene.js
+var n = [], A = [], m = [], Yo = [], I = [];
+function qo(o) {
+  let l = ($, u = []) => {
+    $.length = 0, $.push(...u);
+  };
+  l(n, o.roadInstructions), l(A, o.roadPoints), l(m, o.sceneEmbeds), l(Yo, o.sceneObjects), l(I, o.terrainZones);
+}
+function Xo(o, l) {
+  let $ = o.density ?? 1;
+  for (let { name: u, x: f, y: Y, height: X } of Yo) {
+    if (f + X < o.left || f - X > o.right || Y + X < o.top || Y - X > o.bottom)
+      continue;
+    if (X * $ < 3)
+      continue;
+    if (!fo(u, f, Y, X, l) && o.pending)
+      o.pending.push(u);
+  }
 }
 
-// story-map/kun/scripts/input.js
-var N = !1, _ = 0, L = 0;
-h.addEventListener("mousedown", (o) => {
-  N = !0, _ = o.clientX, L = o.clientY, h.classList.add("dragging");
+// map/scripts/input.js
+var g = !1, t = 0, b = 0;
+Z.addEventListener("mousedown", (o) => {
+  g = !0, t = o.clientX, b = o.clientY, Z.classList.add("dragging");
 });
 window.addEventListener("mouseup", () => {
-  N = !1, h.classList.remove("dragging");
+  g = !1, Z.classList.remove("dragging");
 });
 window.addEventListener("mousemove", (o) => {
-  if (!N)
+  if (!g)
     return;
-  l.x += o.clientX - _, l.y += o.clientY - L, _ = o.clientX, L = o.clientY, Y();
+  q.x += o.clientX - t, q.y += o.clientY - b, t = o.clientX, b = o.clientY, T();
 });
-h.addEventListener("wheel", (o) => {
+Z.addEventListener("wheel", (o) => {
   o.preventDefault();
-  let n = h.getBoundingClientRect(), t = o.clientX - n.left, s = o.clientY - n.top, u = o.deltaY < 0 ? 1.1 : 0.9;
-  k(t, s, u);
+  let l = Z.getBoundingClientRect(), $ = o.clientX - l.left, u = o.clientY - l.top, f = o.deltaY < 0 ? 1.1 : 0.9;
+  x($, u, f);
 }, { passive: !1 });
-var f = null, E = null, w = 1;
-h.addEventListener("touchstart", (o) => {
+var _ = null, w = null, Mo = 1;
+Z.addEventListener("touchstart", (o) => {
   if (o.touches.length === 1)
-    f = { x: o.touches[0].clientX, y: o.touches[0].clientY };
+    _ = { x: o.touches[0].clientX, y: o.touches[0].clientY };
   else if (o.touches.length === 2)
-    f = null, E = R(o.touches), w = l.zoom;
+    _ = null, w = ko(o.touches), Mo = q.zoom;
 });
-h.addEventListener("touchmove", (o) => {
-  if (o.preventDefault(), o.touches.length === 1 && f) {
-    let n = o.touches[0];
-    l.x += n.clientX - f.x, l.y += n.clientY - f.y, f = { x: n.clientX, y: n.clientY }, Y();
+Z.addEventListener("touchmove", (o) => {
+  if (o.preventDefault(), o.touches.length === 1 && _) {
+    let l = o.touches[0];
+    q.x += l.clientX - _.x, q.y += l.clientY - _.y, _ = { x: l.clientX, y: l.clientY }, T();
   } else if (o.touches.length === 2) {
-    let n = R(o.touches), t = h.getBoundingClientRect(), s = (o.touches[0].clientX + o.touches[1].clientX) / 2 - t.left, u = (o.touches[0].clientY + o.touches[1].clientY) / 2 - t.top, d = w * (n / E) / l.zoom;
-    k(s, u, d);
+    let l = ko(o.touches), $ = Z.getBoundingClientRect(), u = (o.touches[0].clientX + o.touches[1].clientX) / 2 - $.left, f = (o.touches[0].clientY + o.touches[1].clientY) / 2 - $.top, X = Mo * (l / w) / q.zoom;
+    x(u, f, X);
   }
 }, { passive: !1 });
-h.addEventListener("touchend", (o) => {
-  if (f = null, E = null, o.touches.length === 1)
-    f = { x: o.touches[0].clientX, y: o.touches[0].clientY };
+Z.addEventListener("touchend", (o) => {
+  if (_ = null, w = null, o.touches.length === 1)
+    _ = { x: o.touches[0].clientX, y: o.touches[0].clientY };
 });
-function R(o) {
-  let n = o[0].clientX - o[1].clientX, t = o[0].clientY - o[1].clientY;
-  return Math.hypot(n, t);
+function ko(o) {
+  let l = o[0].clientX - o[1].clientX, $ = o[0].clientY - o[1].clientY;
+  return Math.hypot(l, $);
 }
+
+// story-map/kun/scripts/index.js
+qo(v);
 </script></body>
 </html>
