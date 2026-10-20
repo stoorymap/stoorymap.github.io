@@ -12,7 +12,6 @@
         padding: 0;
         width: 100%;
         height: 100%;
-        /* background: #dad8e8; */
         background: #e8b8c4;
         overflow: hidden;
       }
@@ -35,863 +34,1327 @@
     <canvas id="c"></canvas>
 
     
-  <script type="module">// story-map/moe-lay/scripts/main.js
-var u = document.getElementById("c"), i = u.getContext("2d");
-function A() {
-  let t = window.devicePixelRatio || 1, o = 4096, e = 16777216, l = Math.min(t, 4096 / window.innerWidth, 4096 / window.innerHeight), h = window.innerWidth * l * window.innerHeight * l;
-  if (h > 16777216)
-    l *= Math.sqrt(16777216 / h);
-  u.width = Math.floor(window.innerWidth * l), u.height = Math.floor(window.innerHeight * l), u.style.width = window.innerWidth + "px", u.style.height = window.innerHeight + "px", i.setTransform(l, 0, 0, l, 0, 0), i.imageSmoothingEnabled = !0, i.imageSmoothingQuality = "high", a();
-}
-window.addEventListener("resize", A);
-window.addEventListener("load", A);
-var d = [];
-function T(t) {
-  let o = u.getBoundingClientRect();
-  return [
-    Math.round((t.clientX - o.left - n.x) / n.zoom),
-    Math.round((t.clientY - o.top - n.y) / n.zoom)
-  ];
-}
-u.addEventListener("click", (t) => {
-  if (!t.shiftKey)
-    return;
-  d.push(T(t)), console.log(`${d.length} points`, d[d.length - 1]);
-});
-addEventListener("keydown", (t) => {
-  if (t.key === "Enter" && d.length)
-    console.log(JSON.stringify(d)), d.length = 0;
-  else if (t.key === "Backspace" && d.length)
-    d.pop(), console.log(`${d.length} points`);
-});
+  <script type="module">// story-map/moe-lay/scripts/scene.json
+var P = {
+  roadInstructions: [],
+  roadPoints: [
+    [0, 400],
+    [384, 400],
+    [767, 400],
+    [1087, 393],
+    [1267, 330],
+    [1416, 211],
+    [1518, 49],
+    [1560, -137],
+    [1560, -329],
+    [1560, -457],
+    [1560, -841],
+    [1560, -1224],
+    [1553, -1288],
+    [1518, -1411],
+    [1416, -1572],
+    [1267, -1691],
+    [1087, -1754],
+    [831, -1762],
+    [448, -1762],
+    [64, -1762],
+    [0, -1769],
+    [-122, -1804],
+    [-284, -1906],
+    [-403, -2055],
+    [-466, -2235],
+    [-473, -2491],
+    [-481, -2682],
+    [-495, -2744],
+    [-578, -2917],
+    [-713, -3052],
+    [-885, -3135],
+    [-1075, -3156],
+    [-1202, -3156],
+    [-1458, -3156],
+    [-1842, -3156],
+    [-2226, -3156],
+    [-2609, -3156],
+    [-2928, -3149],
+    [-3109, -3086],
+    [-3258, -2967],
+    [-3360, -2805],
+    [-3402, -2619],
+    [-3402, -2427],
+    [-3402, -2299],
+    [-3402, -1915],
+    [-3402, -1532],
+    [-3402, -1148],
+    [-3402, -764],
+    [-3402, -381],
+    [-3402, 3],
+    [-3395, 66],
+    [-3360, 189],
+    [-3258, 351],
+    [-3109, 470],
+    [-2928, 533],
+    [-2737, 547],
+    [-2557, 610],
+    [-2408, 730],
+    [-2306, 891],
+    [-2264, 1078],
+    [-2264, 1269],
+    [-2264, 1397],
+    [-2264, 1781],
+    [-2264, 2165],
+    [-2257, 2484],
+    [-2193, 2664],
+    [-2074, 2813],
+    [-1913, 2915],
+    [-1726, 2958],
+    [-1535, 2958],
+    [-1407, 2958],
+    [-1023, 2958],
+    [-639, 2958],
+    [-256, 2958],
+    [128, 2958],
+    [512, 2958],
+    [895, 2958],
+    [1279, 2958],
+    [1662, 2958],
+    [2046, 2958],
+    [2238, 2953],
+    [2301, 2943],
+    [2484, 2887],
+    [2650, 2791],
+    [2790, 2661],
+    [2898, 2503],
+    [3017, 2353],
+    [3167, 2234],
+    [3339, 2151],
+    [3526, 2108],
+    [3782, 2103],
+    [4165, 2103],
+    [4229, 2096],
+    [4352, 2061],
+    [4513, 1959],
+    [4632, 1810],
+    [4696, 1629],
+    [4703, 1374],
+    [4703, 990],
+    [4696, 927],
+    [4660, 804],
+    [4559, 642],
+    [4409, 523],
+    [4229, 460],
+    [4038, 446],
+    [3858, 383],
+    [3708, 264],
+    [3607, 102],
+    [3564, -84],
+    [3564, -276],
+    [3564, -404],
+    [3564, -788],
+    [3564, -1171],
+    [3564, -1555],
+    [3564, -1938],
+    [3561, -2130],
+    [3553, -2194],
+    [3511, -2381],
+    [3437, -2558],
+    [3335, -2720],
+    [3208, -2863],
+    [3117, -2953],
+    [2937, -3134],
+    [2713, -3362],
+    [2602, -3519],
+    [2519, -3691],
+    [2466, -3876],
+    [2445, -4066],
+    [2445, -4258],
+    [2445, -4386],
+    [2445, -4514]
+  ],
+  sceneEmbeds: [
+    {
+      x: -700,
+      y: -1000,
+      src: "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A1407053104&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true"
+    },
+    {
+      x: -1000,
+      y: -1300,
+      src: "https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/wonton-248173221/ahn-jae-wook-friend-1&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true"
+    },
+    {
+      x: 2061,
+      y: 2215,
+      width: 452,
+      height: 238,
+      src: "https://open.spotify.com/embed/track/0W1eHrIACKah9l0Q9v611q"
+    }
+  ],
+  sceneObjects: [
+    {
+      name: "jan-2023",
+      x: 246,
+      y: 224,
+      height: 80
+    },
+    {
+      name: "cl-building",
+      x: 221,
+      y: -1534,
+      height: 900
+    },
+    {
+      name: "scoopy",
+      x: 747,
+      y: -280,
+      height: 200
+    },
+    {
+      name: "may-2023",
+      x: 1649,
+      y: -382,
+      height: 80
+    },
+    {
+      name: "iconsiam",
+      x: 1961,
+      y: -1184,
+      height: 600
+    },
+    {
+      name: "sun-flowers",
+      x: 2001,
+      y: -474,
+      height: 300
+    },
+    {
+      name: "aug-2023",
+      x: 1360,
+      y: -1805,
+      height: 80
+    },
+    {
+      name: "castle",
+      x: 2291,
+      y: -2537,
+      height: 700
+    },
+    {
+      name: "water-gun",
+      x: 766,
+      y: -2115,
+      height: 100
+    },
+    {
+      name: "jun-2024",
+      x: 165,
+      y: -1919,
+      height: 80
+    },
+    {
+      name: "temple",
+      x: 918,
+      y: -3347,
+      height: 700
+    },
+    {
+      name: "croc-1",
+      x: 308,
+      y: -2850,
+      height: 70
+    },
+    {
+      name: "croc-2",
+      x: 161,
+      y: -2891,
+      height: 70
+    },
+    {
+      name: "dec-2024",
+      x: -1131,
+      y: -3028,
+      height: 80
+    },
+    {
+      name: "kayak-boat",
+      x: -1957,
+      y: -2648,
+      height: 100
+    },
+    {
+      name: "kayak-padal-1",
+      x: -1110,
+      y: -2735,
+      height: 300
+    },
+    {
+      name: "kayak-padal-2",
+      x: -1296,
+      y: -2601,
+      height: 300
+    },
+    {
+      name: "life-jacket-1",
+      x: -1459,
+      y: -2902,
+      height: 100
+    },
+    {
+      name: "life-jacket-2",
+      x: -1785,
+      y: -2450,
+      height: 100
+    },
+    {
+      name: "jan-2025",
+      x: -3275,
+      y: -1965,
+      height: 80
+    },
+    {
+      name: "painting-1",
+      x: -2509,
+      y: -1436,
+      height: 100
+    },
+    {
+      name: "painting-2",
+      x: -2649,
+      y: -1795,
+      height: 100
+    },
+    {
+      name: "jun-2025",
+      x: -3256,
+      y: 90,
+      height: 80
+    },
+    {
+      name: "naruto",
+      x: -1693,
+      y: -415,
+      height: 250
+    },
+    {
+      name: "bts",
+      x: -2811,
+      y: 7,
+      height: 300
+    },
+    {
+      name: "sept-2025",
+      x: -2195,
+      y: 1807,
+      height: 80
+    },
+    {
+      name: "jurassic-world-entrance",
+      x: -1705,
+      y: 2373,
+      height: 300
+    },
+    {
+      name: "jurassic-world",
+      x: -1860,
+      y: 1620,
+      height: 600
+    },
+    {
+      name: "nov-2025",
+      x: 597,
+      y: 2734,
+      height: 80
+    },
+    {
+      name: "deadly-bridge",
+      x: 306,
+      y: 975,
+      height: 600
+    },
+    {
+      name: "jumper",
+      x: 1129,
+      y: 2177,
+      height: 100
+    },
+    {
+      name: "life-jacket-1",
+      x: 1488,
+      y: 2061,
+      height: 100
+    },
+    {
+      name: "life-jacket-2",
+      x: 1301,
+      y: 1975,
+      height: 100
+    },
+    {
+      name: "duck-boat",
+      x: 763,
+      y: 1759,
+      height: 200
+    },
+    {
+      name: "marathon-no-123",
+      x: 1977,
+      y: 1121,
+      height: 80
+    },
+    {
+      name: "marathon-no-166",
+      x: 1912,
+      y: 1251,
+      height: 80
+    },
+    {
+      name: "marathon-medal-1",
+      x: 2134,
+      y: 1043,
+      height: 140
+    },
+    {
+      name: "marathon-medal-2",
+      x: 2112,
+      y: 1245,
+      height: 90
+    },
+    {
+      name: "dumbbell-1",
+      x: 2711,
+      y: 1897,
+      height: 90
+    },
+    {
+      name: "dumbbell-2",
+      x: 2700,
+      y: 1710,
+      height: 90
+    },
+    {
+      name: "treadmill",
+      x: 2373,
+      y: 1682,
+      height: 250
+    },
+    {
+      name: "jan-2026",
+      x: 4406,
+      y: 882,
+      height: 80
+    },
+    {
+      name: "graduation-cap",
+      x: 3671,
+      y: 546,
+      height: 80
+    },
+    {
+      name: "graduation-gift",
+      x: 3834,
+      y: 930,
+      height: 70
+    },
+    {
+      name: "graduation-gown",
+      x: 3738,
+      y: 640,
+      height: 200
+    },
+    {
+      name: "feb-2026",
+      x: 3650,
+      y: -600,
+      height: 80
+    },
+    {
+      name: "bicycle",
+      x: 4055,
+      y: -915,
+      height: 200
+    },
+    {
+      name: "jun-2026",
+      x: 3707,
+      y: -1977,
+      height: 80
+    },
+    {
+      name: "alien-at-suvarnabhumi",
+      x: 3926,
+      y: -2755,
+      height: 400
+    },
+    {
+      name: "strawberry",
+      x: -237,
+      y: 133,
+      height: 198
+    },
+    {
+      name: "potato-man",
+      x: -377,
+      y: 114,
+      height: 229
+    }
+  ],
+  terrainZones: [
+    {
+      points: [
+        [135, 411],
+        [67, 20],
+        [-755, 63],
+        [-862, -407],
+        [-1600, -1106],
+        [-1607, -1645],
+        [-1050, -1844],
+        [-403, -2063],
+        [-162, -1792],
+        [228, -1746],
+        [936, -1755],
+        [1346, -1648],
+        [1556, -1306],
+        [1561, -896],
+        [1546, -3],
+        [1190, 349],
+        [682, 407]
+      ],
+      type: "fill",
+      color: "#ff9dac",
+      width: 15
+    },
+    {
+      points: [
+        [1477, 148],
+        [2441, 344],
+        [2633, -111],
+        [3483, 11],
+        [3558, -389],
+        [3556, -1018],
+        [3405, -1303],
+        [2720, -1508],
+        [2434, -1542],
+        [2190, -1383],
+        [1929, -1325],
+        [1567, -1137]
+      ],
+      type: "fill",
+      color: "#ff9dac"
+    },
+    {
+      points: [
+        [1509, -1378],
+        [1576, -1122],
+        [1918, -1307],
+        [2178, -1342],
+        [2415, -1495],
+        [2811, -1467],
+        [3121, -1362],
+        [3533, -1243],
+        [3477, -2358],
+        [3261, -2754],
+        [2242, -2588],
+        [1913, -2346],
+        [1300, -2029],
+        [1284, -1861],
+        [1199, -1705]
+      ],
+      type: "fill",
+      color: "#ff9dac"
+    },
+    {
+      points: [
+        [1266, -1755],
+        [1427, -2038],
+        [1856, -2286],
+        [2408, -2594],
+        [3247, -2762],
+        [2492, -3585],
+        [1874, -3641],
+        [1092, -3439],
+        [-21, -3445],
+        [-579, -3254],
+        [-661, -3024],
+        [-458, -2709],
+        [-477, -2269],
+        [-212, -1836],
+        [253, -1759]
+      ],
+      type: "fill",
+      color: "#f19fd6"
+    },
+    {
+      points: [
+        [-727, -3082],
+        [-477, -2593]
+      ],
+      type: "fill",
+      color: "#96dece"
+    },
+    {
+      points: [
+        [-832, -3129],
+        [-1667, -3141],
+        [-3036, -3113],
+        [-3330, -2842],
+        [-3330, -2326],
+        [-2580, -2273],
+        [-2134, -1941],
+        [-1606, -1667],
+        [-967, -1843],
+        [-430, -2011],
+        [-512, -2781]
+      ],
+      type: "fill",
+      color: "#f19fd6",
+      width: 15
+    },
+    {
+      points: [
+        [-3392, -2371],
+        [-2597, -2279],
+        [-2187, -2003],
+        [-1616, -1734],
+        [-1633, -1569],
+        [-1626, -1106],
+        [-2014, -599],
+        [-2726, -474],
+        [-3373, -554],
+        [-3370, -1015]
+      ],
+      type: "fill",
+      color: "#fea383",
+      width: 15
+    },
+    {
+      points: [
+        [-3390, -567],
+        [-2602, -550],
+        [-1619, -1127],
+        [-1244, -758],
+        [-893, -496],
+        [-780, -45],
+        [-874, 299],
+        [-1431, 804],
+        [-2222, 702],
+        [-2398, 727],
+        [-2535, 610],
+        [-3053, 490],
+        [-3354, 235]
+      ],
+      type: "fill",
+      color: "#fea383"
+    },
+    {
+      points: [
+        [-2258, 1070],
+        [-2381, 718],
+        [-1986, 730],
+        [-1355, 735],
+        [-943, 424],
+        [215, 452],
+        [604, 1198],
+        [270, 2163],
+        [30, 2933],
+        [-1127, 2952],
+        [-1787, 2952],
+        [-2187, 2645],
+        [-2257, 1982]
+      ],
+      type: "fill",
+      color: "#fea383"
+    },
+    {
+      points: [
+        [90, 2925],
+        [-91, 1765],
+        [0, 963],
+        [155, 443],
+        [802, 419],
+        [1177, 386],
+        [1538, 159],
+        [2147, 202],
+        [2824, 690],
+        [3562, 2033],
+        [3156, 2208],
+        [2856, 2507],
+        [2456, 2897]
+      ],
+      type: "fill",
+      color: "#fea383"
+    },
+    {
+      points: [
+        [3523, 2082],
+        [2895, 914],
+        [2441, 446],
+        [2469, 176],
+        [2590, -129],
+        [3090, -95],
+        [3514, -45],
+        [3769, 368],
+        [4356, 518],
+        [4636, 825],
+        [4672, 1746],
+        [4241, 2080]
+      ],
+      type: "fill",
+      color: "#9caee0"
+    },
+    {
+      points: [
+        [4262, 457],
+        [3845, 366],
+        [3584, 2],
+        [3591, -1375],
+        [4133, -1459],
+        [4740, -1605],
+        [4764, -1200],
+        [4880, -811],
+        [4834, -350],
+        [4814, 429],
+        [4565, 595]
+      ],
+      type: "fill",
+      color: "#99abdc"
+    },
+    {
+      points: [
+        [3564, -1366],
+        [4211, -1415],
+        [4715, -1531],
+        [4853, -1830],
+        [4731, -2072],
+        [4627, -2642],
+        [4691, -3060],
+        [4341, -3385],
+        [3754, -3804],
+        [3141, -3691],
+        [2598, -3549],
+        [2751, -3351],
+        [3104, -2983],
+        [3367, -2698],
+        [3575, -2177],
+        [3559, -1848]
+      ],
+      type: "fill",
+      color: "#99abdc"
+    },
+    {
+      points: [
+        [486, 369],
+        [502, 104],
+        [723, -32],
+        [934, -49],
+        [1162, -126],
+        [1230, -483],
+        [826, -471],
+        [580, -503],
+        [544, -654]
+      ],
+      type: "line",
+      color: "#eeefe7",
+      width: 15
+    },
+    {
+      points: [
+        [1570, -380],
+        [1815, -509],
+        [2217, -523],
+        [2378, -521],
+        [2392, -605]
+      ],
+      type: "line",
+      color: "#eeefe7",
+      width: 15
+    },
+    {
+      points: [
+        [1444, -1571],
+        [1606, -1752],
+        [1880, -1841],
+        [2011, -1785],
+        [2218, -1705],
+        [2382, -1688],
+        [2568, -1720],
+        [2574, -1879]
+      ],
+      type: "line",
+      color: "#eeefe7",
+      width: 15
+    },
+    {
+      points: [
+        [87, -1788],
+        [95, -2182],
+        [218, -2393],
+        [763, -2507],
+        [886, -2594],
+        [1187, -2592],
+        [1239, -2664]
+      ],
+      type: "line",
+      color: "#eeefe7",
+      width: 15
+    },
+    {
+      points: [
+        [554, -2472],
+        [432, -2689],
+        [240, -2759],
+        [76, -2818],
+        [92, -2897]
+      ],
+      type: "line",
+      color: "#eeefe7",
+      width: 15
+    },
+    {
+      points: [
+        [-1208, -3142],
+        [-1193, -2913],
+        [-1242, -2736],
+        [-1541, -2732],
+        [-1932, -2728],
+        [-2253, -2627]
+      ],
+      type: "line",
+      color: "#eeefe7",
+      width: 15
+    },
+    {
+      points: [
+        [-1544, -2596],
+        [-1332, -2619],
+        [-1214, -2606],
+        [-1244, -2535],
+        [-1483, -2514],
+        [-1624, -2519],
+        [-1772, -2513],
+        [-1889, -2518],
+        [-1943, -2578],
+        [-1794, -2576]
+      ],
+      type: "fill",
+      color: "#6fb0d6"
+    },
+    {
+      points: [
+        [-3393, -1767],
+        [-3016, -1763],
+        [-2701, -1652],
+        [-2506, -1374]
+      ],
+      type: "line",
+      color: "#eeefe7",
+      width: 15
+    },
+    {
+      points: [
+        [-2267, 1750],
+        [-1957, 1777],
+        [-1963, 2017],
+        [-1811, 2288],
+        [-1377, 2321],
+        [-1312, 2211]
+      ],
+      type: "line",
+      color: "#eeefe7",
+      width: 15
+    },
+    {
+      points: [
+        [-1995, 1758],
+        [-1875, 1364],
+        [-1331, 1312],
+        [-1058, 1032]
+      ],
+      type: "line",
+      color: "#eeefe7",
+      width: 15
+    },
+    {
+      points: [
+        [905, 2908],
+        [949, 2392],
+        [933, 2182],
+        [653, 1901],
+        [795, 1739],
+        [822, 1563]
+      ],
+      type: "line",
+      color: "#eeefe7",
+      width: 15
+    },
+    {
+      points: [
+        [955, 2319],
+        [1656, 2322],
+        [1918, 2125],
+        [2082, 1858],
+        [2403, 1844]
+      ],
+      type: "line",
+      color: "#eeefe7",
+      width: 15
+    },
+    {
+      points: [
+        [2092, 1853],
+        [1990, 1558],
+        [2120, 1311]
+      ],
+      type: "line",
+      color: "#eeefe7",
+      width: 15
+    },
+    {
+      points: [
+        [-3239, 348],
+        [-2981, 93],
+        [-2263, -51],
+        [-2039, 30],
+        [-1600, -181]
+      ],
+      type: "line",
+      color: "#eeefe7",
+      width: 15
+    },
+    {
+      points: [
+        [3582, -428],
+        [3901, -432],
+        [4103, -646],
+        [4231, -769]
+      ],
+      type: "line",
+      color: "#eeefe7",
+      width: 15
+    },
+    {
+      points: [
+        [3993, -503],
+        [4230, -356],
+        [4402, -226],
+        [4465, 45]
+      ],
+      type: "line",
+      color: "#eeefe7",
+      width: 15
+    },
+    {
+      points: [
+        [4690, 1146],
+        [4331, 1145],
+        [4074, 922],
+        [3690, 880]
+      ],
+      type: "line",
+      color: "#eeefe7",
+      width: 15
+    },
+    {
+      points: [
+        [4297, 1133],
+        [3876, 1330],
+        [3841, 1549]
+      ],
+      type: "line",
+      color: "#eeefe7",
+      width: 15
+    },
+    {
+      points: [
+        [3578, -1841],
+        [3788, -1849],
+        [3885, -1960],
+        [3730, -2165],
+        [3979, -2368]
+      ],
+      type: "line",
+      color: "#eeefe7",
+      width: 15
+    },
+    {
+      points: [[5183, 2713]],
+      type: "line",
+      color: "#b3e69e",
+      width: 15
+    },
+    {
+      points: [[-129, 102]],
+      type: "line",
+      color: "#b3e69e",
+      width: 15
+    }
+  ]
+};
 
-// story-map/moe-lay/scripts/assets.js
-var P = "png", $ = {}, _ = {}, X = {};
-function p(t, o = P) {
-  if ($[t])
-    return $[t];
-  let e = new Image;
-  $[t] = e, _[t] = !1;
-  let l = t.replace(/_/g, "-");
-  return e.onerror = () => console.warn(`Failed to load assets/${l}.${o}`), e.onload = () => {
-    if (_[t] = !0, X[t])
-      X[t]();
-    a();
-  }, e.src = `assets/${l}.${o}`, e;
+// map/scripts/main.js
+var x = document.getElementById("c"), $ = x.getContext("2d");
+function b() {
+  let o = window.devicePixelRatio || 1, l = 4096, t = 16777216, h = Math.min(o, 4096 / window.innerWidth, 4096 / window.innerHeight), n = window.innerWidth * h * window.innerHeight * h;
+  if (n > 16777216)
+    h *= Math.sqrt(16777216 / n);
+  x.width = Math.floor(window.innerWidth * h), x.height = Math.floor(window.innerHeight * h), x.style.width = window.innerWidth + "px", x.style.height = window.innerHeight + "px", $.setTransform(h, 0, 0, h, 0, 0), $.imageSmoothingEnabled = !0, $.imageSmoothingQuality = "low", B();
 }
-function b(t) {
-  return !!_[t];
+window.addEventListener("resize", b);
+window.addEventListener("load", b);
+
+// map/scripts/assets.js
+var x1 = "png", K = {}, F = {}, V = {};
+function O(o, l = x1) {
+  if (K[o])
+    return K[o];
+  let t = new Image;
+  K[o] = t, F[o] = !1;
+  let h = o.replace(/_/g, "-");
+  return t.onerror = () => console.warn(`Failed to load assets/${h}.${l}`), t.onload = () => {
+    if (F[o] = !0, V[o])
+      V[o]();
+    B();
+  }, t.src = `assets/${h}.${l}`, t;
 }
-function Q(t, o) {
-  X[t] = o;
+function I(o) {
+  return !!F[o];
+}
+function p(o, l) {
+  V[o] = l;
 }
 
-// story-map/moe-lay/scripts/road.js
-var x = [];
-function C(t) {
-  x = t;
+// map/scripts/road.js
+var N = [];
+function S(o) {
+  N = o;
 }
-function L(t, o, e, l, h) {
-  let s = [{ x: t, y: o, curve: !1 }], r = 0;
-  for (let f of h)
-    if (f.straight)
-      for (let y = 0;y < f.straight; y++) {
-        let c = s[s.length - 1];
-        s.push({
-          x: c.x + Math.cos(r) * e,
-          y: c.y + Math.sin(r) * e,
+function c(o, l, t, h, n) {
+  let f = [{ x: o, y: l, curve: !1 }], y = 0;
+  for (let u of n)
+    if (u.straight)
+      for (let m = 0;m < u.straight; m++) {
+        let i = f[f.length - 1];
+        f.push({
+          x: i.x + Math.cos(y) * t,
+          y: i.y + Math.sin(y) * t,
           curve: !1
         });
       }
-    else if (f.curve) {
-      let c = f.curve * Math.PI / 180 / 14;
-      for (let v = 0;v < 14; v++) {
-        r += c;
-        let N = s[s.length - 1];
-        s.push({
-          x: N.x + Math.cos(r) * l,
-          y: N.y + Math.sin(r) * l,
+    else if (u.curve) {
+      let i = u.curve * Math.PI / 180 / 14;
+      for (let r = 0;r < 14; r++) {
+        y += i;
+        let _ = f[f.length - 1];
+        f.push({
+          x: _.x + Math.cos(y) * h,
+          y: _.y + Math.sin(y) * h,
           curve: !0
         });
       }
     }
-  return s;
+  return f;
+}
+var r1 = 0.03;
+function $1(o, l = 0.5) {
+  let t = o.length, h = (y) => o[Math.max(0, Math.min(t - 1, y))], n = l / 3, f = [{ x: o[0][0], y: o[0][1], s: 0 }];
+  for (let y = 0;y < t - 1; y++) {
+    let u = h(y - 1), m = h(y), i = h(y + 1), r = h(y + 2), _ = m[0] + (i[0] - u[0]) * n, Y = m[1] + (i[1] - u[1]) * n, Q = i[0] - (r[0] - m[0]) * n, L = i[1] - (r[1] - m[1]) * n, Z = Math.max(8, Math.ceil(Math.hypot(i[0] - m[0], i[1] - m[1]) / 10));
+    for (let M = 1;M <= Z; M++) {
+      let g = M / Z, k = 1 - g, R = k * k * k * m[0] + 3 * k * k * g * _ + 3 * k * g * g * Q + g * g * g * i[0], H = k * k * k * m[1] + 3 * k * k * g * Y + 3 * k * g * g * L + g * g * g * i[1], J = f[f.length - 1];
+      f.push({ x: R, y: H, s: J.s + Math.hypot(R - J.x, H - J.y) });
+    }
+  }
+  return f;
+}
+function k1(o, l) {
+  let t = 0, h = o.length - 1;
+  while (h - t > 1) {
+    let u = t + h >> 1;
+    if (o[u].s <= l)
+      t = u;
+    else
+      h = u;
+  }
+  let n = o[t], f = o[h], y = Math.min(1, Math.max(0, (l - n.s) / (f.s - n.s || 1)));
+  return { x: n.x + (f.x - n.x) * y, y: n.y + (f.y - n.y) * y };
+}
+function v(o, l, t) {
+  if (o.length < 2)
+    return [];
+  let h = [{ x: o[0][0], y: o[0][1], curve: !1 }];
+  if (!(l > 0 && t > 0))
+    return h;
+  let n = $1(o), f = n[n.length - 1].s, y = (r) => k1(n, Math.min(f, Math.max(0, r))), u = l / 2, m = (r) => {
+    let _ = y(r - u), Y = y(r), Q = y(r + u), L = Y.x - _.x, Z = Y.y - _.y, M = Q.x - Y.x, g = Q.y - Y.y;
+    if (Math.hypot(L, Z) < 0.000001 || Math.hypot(M, g) < 0.000001)
+      return 0;
+    let k = Math.atan2(g, M) - Math.atan2(Z, L);
+    while (k > Math.PI)
+      k -= 2 * Math.PI;
+    while (k < -Math.PI)
+      k += 2 * Math.PI;
+    return Math.abs(k);
+  }, i = 0;
+  for (;; ) {
+    let r = m(i) > r1;
+    if (i += r ? t : l, i > f)
+      break;
+    let _ = y(i);
+    h.push({ x: _.x, y: _.y, curve: r });
+  }
+  return h;
 }
 
-// story-map/moe-lay/scripts/scene.js
-var E = [
-  { straight: 8 },
-  { curve: -90 },
-  { straight: 8 },
-  { curve: -90 },
-  { straight: 7 },
-  { curve: 90 },
-  { straight: 2 },
-  { curve: -90 },
-  { straight: 14 },
-  { curve: -90 },
-  { straight: 20 },
-  { curve: -90 },
-  { curve: 90 },
-  { straight: 10 },
-  { curve: -90 },
-  { straight: 30 },
-  { curve: -60 },
-  { curve: 60 },
-  { straight: 4 },
-  { curve: -90 },
-  { straight: 4 },
-  { curve: -90 },
-  { curve: 90 },
-  { straight: 15 },
-  { curve: -45 },
-  { straight: 5 },
-  { curve: 45 },
-  { straight: 3 }
-], S = [
-  { name: "su-myat", x: -196, y: 153, height: 175 },
-  { name: "moe-lay", x: -403, y: 128, height: 200 },
-  { name: "jan-2023", x: 246, y: 224, height: 80 },
-  { name: "cl-building", x: 221, y: -1534, height: 900 },
-  { name: "scoopy", x: 747, y: -280, height: 200 },
-  { name: "may-2023", x: 1649, y: -382, height: 80 },
-  { name: "iconsiam", x: 1961, y: -1184, height: 600 },
-  { name: "sun-flowers", x: 2001, y: -474, height: 300 },
-  { name: "aug-2023", x: 1360, y: -1805, height: 80 },
-  { name: "castle", x: 2291, y: -2537, height: 700 },
-  { name: "water-gun", x: 766, y: -2115, height: 100 },
-  { name: "jun-2024", x: 165, y: -1919, height: 80 },
-  { name: "temple", x: 918, y: -3347, height: 700 },
-  { name: "croc-1", x: 308, y: -2850, height: 70 },
-  { name: "croc-2", x: 161, y: -2891, height: 70 },
-  { name: "dec-2024", x: -1131, y: -3028, height: 80 },
-  { name: "kayak-boat", x: -1957, y: -2648, height: 100 },
-  { name: "kayak-padal-1", x: -1110, y: -2735, height: 300 },
-  { name: "kayak-padal-2", x: -1296, y: -2601, height: 300 },
-  { name: "life-jacket-1", x: -1459, y: -2902, height: 100 },
-  { name: "life-jacket-2", x: -1785, y: -2450, height: 100 },
-  { name: "jan-2025", x: -3275, y: -1965, height: 80 },
-  { name: "painting-1", x: -2509, y: -1436, height: 100 },
-  { name: "painting-2", x: -2649, y: -1795, height: 100 },
-  { name: "jun-2025", x: -3256, y: 90, height: 80 },
-  { name: "naruto", x: -1693, y: -415, height: 250 },
-  { name: "bts", x: -2811, y: 7, height: 300 },
-  { name: "sept-2025", x: -2195, y: 1807, height: 80 },
-  { name: "jurassic-world-entrance", x: -1705, y: 2373, height: 300 },
-  { name: "jurassic-world", x: -1860, y: 1620, height: 600 },
-  { name: "nov-2025", x: 597, y: 2734, height: 80 },
-  { name: "deadly-bridge", x: 306, y: 975, height: 600 },
-  { name: "jumper", x: 1129, y: 2177, height: 100 },
-  { name: "life-jacket-1", x: 1488, y: 2061, height: 100 },
-  { name: "life-jacket-2", x: 1301, y: 1975, height: 100 },
-  { name: "duck-boat", x: 763, y: 1759, height: 200 },
-  { name: "marathon-no-123", x: 1977, y: 1121, height: 80 },
-  { name: "marathon-no-166", x: 1912, y: 1251, height: 80 },
-  { name: "marathon-medal-1", x: 2134, y: 1043, height: 140 },
-  { name: "marathon-medal-2", x: 2112, y: 1245, height: 90 },
-  { name: "dumbbell-1", x: 2711, y: 1897, height: 90 },
-  { name: "dumbbell-2", x: 2700, y: 1710, height: 90 },
-  { name: "treadmill", x: 2373, y: 1682, height: 250 },
-  { name: "jan-2026", x: 4406, y: 882, height: 80 },
-  { name: "graduation-cap", x: 3671, y: 546, height: 80 },
-  { name: "graduation-gift", x: 3834, y: 930, height: 70 },
-  { name: "graduation-gown", x: 3738, y: 640, height: 200 },
-  { name: "feb-2026", x: 3650, y: -600, height: 80 },
-  { name: "bicycle", x: 4055, y: -915, height: 200 },
-  { name: "jun-2026", x: 3707, y: -1977, height: 80 },
-  { name: "alien-at-suvarnabhumi", x: 3926, y: -2755, height: 400 }
-], J = [
-  {
-    x: -700,
-    y: -1000,
-    src: "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A1407053104&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true"
-  },
-  {
-    x: -1000,
-    y: -1300,
-    src: "https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/wonton-248173221/ahn-jae-wook-friend-1&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true"
-  },
-  {
-    x: 2061,
-    y: 2215,
-    width: 452,
-    height: 238,
-    src: "https://open.spotify.com/embed/track/0W1eHrIACKah9l0Q9v611q"
-  }
-], K = [
-  {
-    points: [
-      [135, 411],
-      [67, 20],
-      [-755, 63],
-      [-862, -407],
-      [-1600, -1106],
-      [-1607, -1645],
-      [-1050, -1844],
-      [-403, -2063],
-      [-162, -1792],
-      [228, -1746],
-      [936, -1755],
-      [1346, -1648],
-      [1556, -1306],
-      [1561, -896],
-      [1546, -3],
-      [1190, 349],
-      [682, 407]
-    ],
-    type: "fill",
-    color: "#ff9dac",
-    width: 15
-  },
-  {
-    points: [
-      [1477, 148],
-      [2441, 344],
-      [2633, -111],
-      [3483, 11],
-      [3558, -389],
-      [3556, -1018],
-      [3405, -1303],
-      [2720, -1508],
-      [2434, -1542],
-      [2190, -1383],
-      [1929, -1325],
-      [1567, -1137]
-    ],
-    type: "fill",
-    color: "#ff9dac"
-  },
-  {
-    points: [
-      [1509, -1378],
-      [1576, -1122],
-      [1918, -1307],
-      [2178, -1342],
-      [2415, -1495],
-      [2811, -1467],
-      [3121, -1362],
-      [3533, -1243],
-      [3477, -2358],
-      [3261, -2754],
-      [2242, -2588],
-      [1913, -2346],
-      [1300, -2029],
-      [1284, -1861],
-      [1199, -1705]
-    ],
-    type: "fill",
-    color: "#ff9dac"
-  },
-  {
-    points: [
-      [1266, -1755],
-      [1427, -2038],
-      [1856, -2286],
-      [2408, -2594],
-      [3247, -2762],
-      [2492, -3585],
-      [1874, -3641],
-      [1092, -3439],
-      [-21, -3445],
-      [-579, -3254],
-      [-661, -3024],
-      [-458, -2709],
-      [-477, -2269],
-      [-212, -1836],
-      [253, -1759]
-    ],
-    type: "fill",
-    color: "#f19fd6"
-  },
-  {
-    points: [
-      [-727, -3082],
-      [-477, -2593]
-    ],
-    type: "fill",
-    color: "#96dece"
-  },
-  {
-    points: [
-      [-832, -3129],
-      [-1667, -3141],
-      [-3036, -3113],
-      [-3330, -2842],
-      [-3330, -2326],
-      [-2580, -2273],
-      [-2134, -1941],
-      [-1606, -1667],
-      [-967, -1843],
-      [-430, -2011],
-      [-512, -2781]
-    ],
-    type: "fill",
-    color: "#f19fd6",
-    width: 15
-  },
-  {
-    points: [
-      [-3392, -2371],
-      [-2597, -2279],
-      [-2187, -2003],
-      [-1616, -1734],
-      [-1633, -1569],
-      [-1626, -1106],
-      [-2014, -599],
-      [-2726, -474],
-      [-3373, -554],
-      [-3370, -1015]
-    ],
-    type: "fill",
-    color: "#fea383",
-    width: 15
-  },
-  {
-    points: [
-      [-3390, -567],
-      [-2602, -550],
-      [-1619, -1127],
-      [-1244, -758],
-      [-893, -496],
-      [-780, -45],
-      [-874, 299],
-      [-1431, 804],
-      [-2222, 702],
-      [-2398, 727],
-      [-2535, 610],
-      [-3053, 490],
-      [-3354, 235]
-    ],
-    type: "fill",
-    color: "#fea383"
-  },
-  {
-    points: [
-      [-2258, 1070],
-      [-2381, 718],
-      [-1986, 730],
-      [-1355, 735],
-      [-943, 424],
-      [215, 452],
-      [604, 1198],
-      [270, 2163],
-      [30, 2933],
-      [-1127, 2952],
-      [-1787, 2952],
-      [-2187, 2645],
-      [-2257, 1982]
-    ],
-    type: "fill",
-    color: "#fea383"
-  },
-  {
-    points: [
-      [90, 2925],
-      [-91, 1765],
-      [0, 963],
-      [155, 443],
-      [802, 419],
-      [1177, 386],
-      [1538, 159],
-      [2147, 202],
-      [2824, 690],
-      [3562, 2033],
-      [3156, 2208],
-      [2856, 2507],
-      [2456, 2897]
-    ],
-    type: "fill",
-    color: "#fea383"
-  },
-  {
-    points: [
-      [3523, 2082],
-      [2895, 914],
-      [2441, 446],
-      [2469, 176],
-      [2590, -129],
-      [3090, -95],
-      [3514, -45],
-      [3769, 368],
-      [4356, 518],
-      [4636, 825],
-      [4672, 1746],
-      [4241, 2080]
-    ],
-    type: "fill",
-    color: "#9caee0"
-  },
-  {
-    points: [
-      [4262, 457],
-      [3845, 366],
-      [3584, 2],
-      [3591, -1375],
-      [4133, -1459],
-      [4740, -1605],
-      [4764, -1200],
-      [4880, -811],
-      [4834, -350],
-      [4814, 429],
-      [4565, 595]
-    ],
-    type: "fill",
-    color: "#99abdc"
-  },
-  {
-    points: [
-      [3564, -1366],
-      [4211, -1415],
-      [4715, -1531],
-      [4853, -1830],
-      [4731, -2072],
-      [4627, -2642],
-      [4691, -3060],
-      [4341, -3385],
-      [3754, -3804],
-      [3141, -3691],
-      [2598, -3549],
-      [2751, -3351],
-      [3104, -2983],
-      [3367, -2698],
-      [3575, -2177],
-      [3559, -1848]
-    ],
-    type: "fill",
-    color: "#99abdc"
-  },
-  {
-    points: [
-      [486, 369],
-      [502, 104],
-      [723, -32],
-      [934, -49],
-      [1162, -126],
-      [1230, -483],
-      [826, -471],
-      [580, -503],
-      [544, -654]
-    ],
-    type: "line",
-    color: "#eeefe7",
-    width: 15
-  },
-  {
-    points: [
-      [1570, -380],
-      [1815, -509],
-      [2217, -523],
-      [2378, -521],
-      [2392, -605]
-    ],
-    type: "line",
-    color: "#eeefe7",
-    width: 15
-  },
-  {
-    points: [
-      [1444, -1571],
-      [1606, -1752],
-      [1880, -1841],
-      [2011, -1785],
-      [2218, -1705],
-      [2382, -1688],
-      [2568, -1720],
-      [2574, -1879]
-    ],
-    type: "line",
-    color: "#eeefe7",
-    width: 15
-  },
-  {
-    points: [
-      [87, -1788],
-      [95, -2182],
-      [218, -2393],
-      [763, -2507],
-      [886, -2594],
-      [1187, -2592],
-      [1239, -2664]
-    ],
-    type: "line",
-    color: "#eeefe7",
-    width: 15
-  },
-  {
-    points: [
-      [554, -2472],
-      [432, -2689],
-      [240, -2759],
-      [76, -2818],
-      [92, -2897]
-    ],
-    type: "line",
-    color: "#eeefe7",
-    width: 15
-  },
-  {
-    points: [
-      [-1208, -3142],
-      [-1193, -2913],
-      [-1242, -2736],
-      [-1541, -2732],
-      [-1932, -2728],
-      [-2253, -2627]
-    ],
-    type: "line",
-    color: "#eeefe7",
-    width: 15
-  },
-  {
-    points: [
-      [-1544, -2596],
-      [-1332, -2619],
-      [-1214, -2606],
-      [-1244, -2535],
-      [-1483, -2514],
-      [-1624, -2519],
-      [-1772, -2513],
-      [-1889, -2518],
-      [-1943, -2578],
-      [-1794, -2576]
-    ],
-    type: "fill",
-    color: "#6fb0d6"
-  },
-  {
-    points: [
-      [-3393, -1767],
-      [-3016, -1763],
-      [-2701, -1652],
-      [-2506, -1374]
-    ],
-    type: "line",
-    color: "#eeefe7",
-    width: 15
-  },
-  {
-    points: [
-      [-2267, 1750],
-      [-1957, 1777],
-      [-1963, 2017],
-      [-1811, 2288],
-      [-1377, 2321],
-      [-1312, 2211]
-    ],
-    type: "line",
-    color: "#eeefe7",
-    width: 15
-  },
-  {
-    points: [
-      [-1995, 1758],
-      [-1875, 1364],
-      [-1331, 1312],
-      [-1058, 1032]
-    ],
-    type: "line",
-    color: "#eeefe7",
-    width: 15
-  },
-  {
-    points: [
-      [905, 2908],
-      [949, 2392],
-      [933, 2182],
-      [653, 1901],
-      [795, 1739],
-      [822, 1563]
-    ],
-    type: "line",
-    color: "#eeefe7",
-    width: 15
-  },
-  {
-    points: [
-      [955, 2319],
-      [1656, 2322],
-      [1918, 2125],
-      [2082, 1858],
-      [2403, 1844]
-    ],
-    type: "line",
-    color: "#eeefe7",
-    width: 15
-  },
-  {
-    points: [
-      [2092, 1853],
-      [1990, 1558],
-      [2120, 1311]
-    ],
-    type: "line",
-    color: "#eeefe7",
-    width: 15
-  },
-  {
-    points: [
-      [-3239, 348],
-      [-2981, 93],
-      [-2263, -51],
-      [-2039, 30],
-      [-1600, -181]
-    ],
-    type: "line",
-    color: "#eeefe7",
-    width: 15
-  },
-  {
-    points: [
-      [3582, -428],
-      [3901, -432],
-      [4103, -646],
-      [4231, -769]
-    ],
-    type: "line",
-    color: "#eeefe7",
-    width: 15
-  },
-  {
-    points: [
-      [3993, -503],
-      [4230, -356],
-      [4402, -226],
-      [4465, 45]
-    ],
-    type: "line",
-    color: "#eeefe7",
-    width: 15
-  },
-  {
-    points: [
-      [4690, 1146],
-      [4331, 1145],
-      [4074, 922],
-      [3690, 880]
-    ],
-    type: "line",
-    color: "#eeefe7",
-    width: 15
-  },
-  {
-    points: [
-      [4297, 1133],
-      [3876, 1330],
-      [3841, 1549]
-    ],
-    type: "line",
-    color: "#eeefe7",
-    width: 15
-  },
-  {
-    points: [
-      [3578, -1841],
-      [3788, -1849],
-      [3885, -1960],
-      [3730, -2165],
-      [3979, -2368]
-    ],
-    type: "line",
-    color: "#eeefe7",
-    width: 15
-  },
-  {
-    points: [[5183, 2713]],
-    type: "line",
-    color: "#b3e69e",
-    width: 15
-  },
-  {
-    points: [[-129, 102]],
-    type: "line",
-    color: "#b3e69e",
-    width: 15
-  }
-];
-function G(t) {
-  for (let { name: o, x: e, y: l, height: h } of S) {
-    if (e + h < t.left || e - h > t.right || l + h < t.top || l - h > t.bottom)
-      continue;
-    V(o, e, l, h);
-  }
+// map/scripts/camera.js
+var e = { x: 500, y: 400, zoom: 0.3 }, g1 = 0.1, _1 = 5, U = !1;
+function j() {
+  if (U)
+    return;
+  U = !0, requestAnimationFrame(() => {
+    U = !1, B();
+  });
+}
+function E(o, l, t) {
+  let h = Math.min(_1, Math.max(g1, e.zoom * t)), n = (o - e.x) / e.zoom, f = (l - e.y) / e.zoom;
+  e.zoom = h, e.x = o - n * e.zoom, e.y = l - f * e.zoom, j();
 }
 
-// story-map/moe-lay/scripts/embeds.js
-var k = 300, q = 300, m = null, F = /* @__PURE__ */ new Map;
-function z() {
-  if (m)
-    return m;
-  return m = document.createElement("div"), m.id = "embed-layer", Object.assign(m.style, {
+// map/scripts/embeds.js
+var o1 = 300, l1 = 300, q = null, a = /* @__PURE__ */ new Map;
+function s1() {
+  if (q)
+    return q;
+  return q = document.createElement("div"), q.id = "embed-layer", Object.assign(q.style, {
     position: "fixed",
     inset: "0",
     overflow: "hidden",
     pointerEvents: "none",
     zIndex: "10"
-  }), document.body.appendChild(m), m;
+  }), document.body.appendChild(q), q;
 }
-function H(t) {
-  let o = document.createElement("div");
-  Object.assign(o.style, {
+function X1(o) {
+  let l = document.createElement("div");
+  Object.assign(l.style, {
     position: "absolute",
     top: "0",
     left: "0",
-    width: (t.width ?? k) + "px",
-    height: (t.height ?? q) + "px",
+    width: (o.width ?? o1) + "px",
+    height: (o.height ?? l1) + "px",
     transformOrigin: "top left",
     pointerEvents: "auto"
   });
-  let e = document.createElement("iframe");
-  return e.width = "100%", e.height = "100%", e.scrolling = "no", e.frameBorder = "no", e.allow = "autoplay; encrypted-media", e.loading = "lazy", e.src = t.src, o.appendChild(e), z().appendChild(o), o;
+  let t = document.createElement("iframe");
+  return t.width = "100%", t.height = "100%", t.scrolling = "no", t.frameBorder = "no", t.allow = "autoplay; encrypted-media", t.loading = "lazy", t.src = o.src, l.appendChild(t), s1().appendChild(l), l;
 }
-function I() {
-  let { innerWidth: t, innerHeight: o } = window;
-  for (let e of J) {
-    let l = e.x * n.zoom + n.x, h = e.y * n.zoom + n.y, s = (e.width ?? k) * n.zoom, r = (e.height ?? q) * n.zoom, f = l + s < 0 || l > t || h + r < 0 || h > o, y = F.get(e);
-    if (f) {
-      if (y)
-        y.style.display = "none";
+function t1() {
+  let { innerWidth: o, innerHeight: l } = window;
+  for (let t of A) {
+    let h = t.x * e.zoom + e.x, n = t.y * e.zoom + e.y, f = (t.width ?? o1) * e.zoom, y = (t.height ?? l1) * e.zoom, u = h + f < 0 || h > o || n + y < 0 || n > l, m = a.get(t);
+    if (u) {
+      if (m)
+        m.style.display = "none";
       continue;
     }
-    if (!y)
-      y = H(e), F.set(e, y);
-    y.style.display = "", y.style.width = (e.width ?? k) + "px", y.style.height = (e.height ?? q) + "px", y.style.transform = `translate(${l}px, ${h}px) scale(${n.zoom})`;
+    if (!m)
+      m = X1(t), a.set(t, m);
+    m.style.display = "", m.style.transform = `translate(${h}px, ${n}px) scale(${e.zoom})`;
   }
 }
 
-// story-map/moe-lay/scripts/terrain.js
-function t1(t) {
-  let o = t.points.map((h) => h[0]), e = t.points.map((h) => h[1]), l = (t.type === "line" ? (t.width || 0) / 2 : (t.borderWidth || 0) / 2) + 200;
+// map/scripts/terrain.js
+function q1(o) {
+  let l = o.points.map((n) => n[0]), t = o.points.map((n) => n[1]), h = (o.type === "line" ? (o.width || 0) / 2 : (o.borderWidth || 0) / 2) + 200;
   return {
-    l: Math.min(...o) - l,
-    t: Math.min(...e) - l,
-    r: Math.max(...o) + l,
-    b: Math.max(...e) + l
+    l: Math.min(...l) - h,
+    t: Math.min(...t) - h,
+    r: Math.max(...l) + h,
+    b: Math.max(...t) + h
   };
 }
-function o1(t, o = 0.5) {
-  let e = t.length, l = (s) => t[Math.max(0, Math.min(e - 1, s))], h = o / 3;
-  i.moveTo(t[0][0], t[0][1]);
-  for (let s = 0;s < e - 1; s++) {
-    let r = l(s - 1), f = l(s), y = l(s + 1), c = l(s + 2);
-    i.bezierCurveTo(f[0] + (y[0] - r[0]) * h, f[1] + (y[1] - r[1]) * h, y[0] - (c[0] - f[0]) * h, y[1] - (c[1] - f[1]) * h, y[0], y[1]);
+function Y1(o, l = 0.5, t = $) {
+  let h = o.length, n = (y) => o[Math.max(0, Math.min(h - 1, y))], f = l / 3;
+  t.moveTo(o[0][0], o[0][1]);
+  for (let y = 0;y < h - 1; y++) {
+    let u = n(y - 1), m = n(y), i = n(y + 1), r = n(y + 2);
+    t.bezierCurveTo(m[0] + (i[0] - u[0]) * f, m[1] + (i[1] - u[1]) * f, i[0] - (r[0] - m[0]) * f, i[1] - (r[1] - m[1]) * f, i[0], i[1]);
   }
 }
-function U(t) {
-  for (let o of K) {
-    if (!o.points || o.points.length < 2)
+function W(o, l = $) {
+  for (let t of d) {
+    if (!t.points || t.points.length < 2)
       continue;
-    let e = t1(o);
-    if (e.r < t.left || e.l > t.right || e.b < t.top || e.t > t.bottom)
+    let h = q1(t);
+    if (h.r < o.left || h.l > o.right || h.b < o.top || h.t > o.bottom)
       continue;
-    if (i.beginPath(), o1(o.points, o.tension), o.type === "fill") {
-      if (i.fillStyle = o.color, i.fill(), o.border)
-        i.closePath(), i.lineJoin = "round", i.setLineDash(o.borderDash || []), i.strokeStyle = o.border, i.lineWidth = o.borderWidth || 10, i.stroke(), i.setLineDash([]);
-    } else if (o.type === "line")
-      i.lineCap = "round", i.lineJoin = "round", i.setLineDash(o.dash || []), i.strokeStyle = o.color, i.lineWidth = o.width || 15, i.stroke(), i.setLineDash([]);
+    if (l.beginPath(), Y1(t.points, t.tension, l), t.type === "fill") {
+      if (l.fillStyle = t.color, l.fill(), t.border)
+        l.closePath(), l.lineJoin = "round", l.setLineDash(t.borderDash || []), l.strokeStyle = t.border, l.lineWidth = t.borderWidth || 10, l.stroke(), l.setLineDash([]);
+    } else if (t.type === "line")
+      l.lineCap = "round", l.lineJoin = "round", l.setLineDash(t.dash || []), l.strokeStyle = t.color, l.lineWidth = t.width || 15, l.stroke(), l.setLineDash([]);
   }
 }
 
-// story-map/moe-lay/scripts/overlays.js
-var R = [];
+// map/scripts/overlays.js
+var h1 = [];
 
-// story-map/moe-lay/scripts/draw.js
-function e1(t = 0) {
-  let o = u.clientWidth, e = u.clientHeight;
+// map/scripts/draw.js
+function M1(o = 0) {
+  let l = x.clientWidth, t = x.clientHeight;
   return {
-    left: -n.x / n.zoom - t,
-    top: -n.y / n.zoom - t,
-    right: (o - n.x) / n.zoom + t,
-    bottom: (e - n.y) / n.zoom + t
+    left: -e.x / e.zoom - o,
+    top: -e.y / e.zoom - o,
+    right: (l - e.x) / e.zoom + o,
+    bottom: (t - e.y) / e.zoom + o,
+    zoom: e.zoom,
+    density: e.zoom * (x.width / (x.clientWidth || 1))
   };
 }
-function a() {
-  i.clearRect(0, 0, u.width, u.height), i.save(), i.translate(n.x, n.y), i.scale(n.zoom, n.zoom), i.imageSmoothingEnabled = n.zoom < 2;
-  let t = e1(400);
-  U(t), l1(t), G(t);
-  for (let o of R)
-    o(i);
-  i.restore(), I();
+var B1 = 8000000, Z1 = 1, s = null;
+function N1() {
+  let o = 1 / 0, l = 1 / 0, t = -1 / 0, h = -1 / 0, n = (y, u) => {
+    if (y < o)
+      o = y;
+    if (y > t)
+      t = y;
+    if (u < l)
+      l = u;
+    if (u > h)
+      h = u;
+  };
+  for (let y of d)
+    for (let [u, m] of y.points || [])
+      n(u, m);
+  if (o === 1 / 0)
+    return null;
+  let f = 400;
+  return { l: o - f, t: l - f, r: t + f, b: h + f };
 }
-function V(t, o, e, l) {
-  let h = p(t);
-  if (!b(t))
+function d1() {
+  let o = N1();
+  if (!o)
     return;
-  let s = l / h.naturalHeight, r = h.naturalWidth * s;
-  i.drawImage(h, o, e, r, l);
+  let l = o.r - o.l, t = o.b - o.t, h = Math.min(1, Math.sqrt(B1 / (l * t)), 4096 / Math.max(l, t)), n = document.createElement("canvas");
+  n.width = Math.ceil(l * h), n.height = Math.ceil(t * h);
+  let f = n.getContext("2d");
+  f.imageSmoothingQuality = "high", f.scale(h, h), f.translate(-o.l, -o.t);
+  let y = { left: o.l, top: o.t, right: o.r, bottom: o.b, zoom: h };
+  W(y, f), s = {
+    canvas: n,
+    x: o.l,
+    y: o.t,
+    w: n.width / h,
+    h: n.height / h,
+    scale: h
+  };
 }
-function l1(t) {
-  let o = p("road", "svg");
-  if (!b("road"))
+function Q1(o) {
+  let l = document.body.classList.contains("dev-design");
+  if (l || e.zoom > 1.5)
+    s = null;
+  if (!s && !l && e.zoom <= 0.4)
+    d1();
+  let t = e.zoom * (x.width / (x.clientWidth || 1));
+  if (s && t <= s.scale * Z1)
+    $.drawImage(s.canvas, s.x, s.y, s.w, s.h);
+  else
+    W(o);
+  L1(o);
+}
+function B() {
+  $.save(), $.setTransform(1, 0, 0, 1, 0, 0), $.clearRect(0, 0, x.width, x.height), $.restore(), $.save(), $.translate(e.x, e.y), $.scale(e.zoom, e.zoom), $.imageSmoothingEnabled = e.zoom < 2;
+  let o = M1(400);
+  Q1(o), y1(o);
+  for (let l of h1)
+    l($);
+  $.restore(), t1();
+}
+function n1(o, l, t, h, n = $) {
+  let f = O(o);
+  if (!I(o))
+    return !1;
+  let y = h / f.naturalHeight, u = f.naturalWidth * y;
+  return n.drawImage(f, l, t, u, h), !0;
+}
+function L1(o, l = $) {
+  let t = O("road", "svg");
+  if (!I("road"))
     return;
-  for (let e = 0;e < x.length - 1; e++) {
-    let l = x[e], h = x[e + 1], s = (l.x + h.x) / 2, r = (l.y + h.y) / 2;
-    if (s < t.left || s > t.right || r < t.top || r > t.bottom)
+  for (let h = 0;h < N.length - 1; h++) {
+    let n = N[h], f = N[h + 1], y = (n.x + f.x) / 2, u = (n.y + f.y) / 2;
+    if (y < o.left || y > o.right || u < o.top || u > o.bottom)
       continue;
-    let f = Math.atan2(h.y - l.y, h.x - l.x), y = h.curve ? o.width * 0.5 : o.width, c = o.height;
-    i.save(), i.translate(s, r), i.rotate(f), i.drawImage(o, -y / 2, -c / 2, y, c), i.restore();
+    let m = Math.atan2(f.y - n.y, f.x - n.x), i = f.curve ? t.width * 0.5 : t.width, r = t.height;
+    l.save(), l.translate(y, u), l.rotate(m), l.drawImage(t, -i / 2, -r / 2, i, r), l.restore();
   }
 }
-function n1() {
-  let o = p("road", "svg").width * 0.92, e = o * 0.5;
-  C(L(0, 400, o, e, E));
+function O1() {
+  let l = O("road", "svg").width * 0.92, t = l * 0.5;
+  S(G.length >= 2 ? v(G, l, t) : c(0, 400, l, t, C));
 }
-Q("road", n1);
+p("road", O1);
 
-// story-map/moe-lay/scripts/camera.js
-var n = { x: 500, y: 400, zoom: 0.3 }, h1 = 0.1, i1 = 5, Y = !1;
-function w() {
-  if (Y)
-    return;
-  Y = !0, requestAnimationFrame(() => {
-    Y = !1, a();
-  });
+// map/scripts/scene.js
+var C = [], G = [], A = [], f1 = [], d = [];
+function e1(o) {
+  let l = (t, h = []) => {
+    t.length = 0, t.push(...h);
+  };
+  l(C, o.roadInstructions), l(G, o.roadPoints), l(A, o.sceneEmbeds), l(f1, o.sceneObjects), l(d, o.terrainZones);
 }
-function M(t, o, e) {
-  let l = Math.min(i1, Math.max(h1, n.zoom * e)), h = (t - n.x) / n.zoom, s = (o - n.y) / n.zoom;
-  n.zoom = l, n.x = t - h * n.zoom, n.y = o - s * n.zoom, w();
+function y1(o, l) {
+  let t = o.density ?? 1;
+  for (let { name: h, x: n, y: f, height: y } of f1) {
+    if (n + y < o.left || n - y > o.right || f + y < o.top || f - y > o.bottom)
+      continue;
+    if (y * t < 3)
+      continue;
+    if (!n1(h, n, f, y, l) && o.pending)
+      o.pending.push(h);
+  }
 }
 
-// story-map/moe-lay/scripts/input.js
-var B = !1, O = 0, Z = 0;
-u.addEventListener("mousedown", (t) => {
-  B = !0, O = t.clientX, Z = t.clientY, u.classList.add("dragging");
+// map/scripts/input.js
+var T = !1, D = 0, w = 0;
+x.addEventListener("mousedown", (o) => {
+  T = !0, D = o.clientX, w = o.clientY, x.classList.add("dragging");
 });
 window.addEventListener("mouseup", () => {
-  B = !1, u.classList.remove("dragging");
+  T = !1, x.classList.remove("dragging");
 });
-window.addEventListener("mousemove", (t) => {
-  if (!B)
+window.addEventListener("mousemove", (o) => {
+  if (!T)
     return;
-  n.x += t.clientX - O, n.y += t.clientY - Z, O = t.clientX, Z = t.clientY, w();
+  e.x += o.clientX - D, e.y += o.clientY - w, D = o.clientX, w = o.clientY, j();
 });
-u.addEventListener("wheel", (t) => {
-  t.preventDefault();
-  let o = u.getBoundingClientRect(), e = t.clientX - o.left, l = t.clientY - o.top, h = t.deltaY < 0 ? 1.1 : 0.9;
-  M(e, l, h);
+x.addEventListener("wheel", (o) => {
+  o.preventDefault();
+  let l = x.getBoundingClientRect(), t = o.clientX - l.left, h = o.clientY - l.top, n = o.deltaY < 0 ? 1.1 : 0.9;
+  E(t, h, n);
 }, { passive: !1 });
-var g = null, j = null, W = 1;
-u.addEventListener("touchstart", (t) => {
-  if (t.touches.length === 1)
-    g = { x: t.touches[0].clientX, y: t.touches[0].clientY };
-  else if (t.touches.length === 2)
-    g = null, j = D(t.touches), W = n.zoom;
+var X = null, z = null, u1 = 1;
+x.addEventListener("touchstart", (o) => {
+  if (o.touches.length === 1)
+    X = { x: o.touches[0].clientX, y: o.touches[0].clientY };
+  else if (o.touches.length === 2)
+    X = null, z = m1(o.touches), u1 = e.zoom;
 });
-u.addEventListener("touchmove", (t) => {
-  if (t.preventDefault(), t.touches.length === 1 && g) {
-    let o = t.touches[0];
-    n.x += o.clientX - g.x, n.y += o.clientY - g.y, g = { x: o.clientX, y: o.clientY }, w();
-  } else if (t.touches.length === 2) {
-    let o = D(t.touches), e = u.getBoundingClientRect(), l = (t.touches[0].clientX + t.touches[1].clientX) / 2 - e.left, h = (t.touches[0].clientY + t.touches[1].clientY) / 2 - e.top, r = W * (o / j) / n.zoom;
-    M(l, h, r);
+x.addEventListener("touchmove", (o) => {
+  if (o.preventDefault(), o.touches.length === 1 && X) {
+    let l = o.touches[0];
+    e.x += l.clientX - X.x, e.y += l.clientY - X.y, X = { x: l.clientX, y: l.clientY }, j();
+  } else if (o.touches.length === 2) {
+    let l = m1(o.touches), t = x.getBoundingClientRect(), h = (o.touches[0].clientX + o.touches[1].clientX) / 2 - t.left, n = (o.touches[0].clientY + o.touches[1].clientY) / 2 - t.top, y = u1 * (l / z) / e.zoom;
+    E(h, n, y);
   }
 }, { passive: !1 });
-u.addEventListener("touchend", (t) => {
-  if (g = null, j = null, t.touches.length === 1)
-    g = { x: t.touches[0].clientX, y: t.touches[0].clientY };
+x.addEventListener("touchend", (o) => {
+  if (X = null, z = null, o.touches.length === 1)
+    X = { x: o.touches[0].clientX, y: o.touches[0].clientY };
 });
-function D(t) {
-  let o = t[0].clientX - t[1].clientX, e = t[0].clientY - t[1].clientY;
-  return Math.hypot(o, e);
+function m1(o) {
+  let l = o[0].clientX - o[1].clientX, t = o[0].clientY - o[1].clientY;
+  return Math.hypot(l, t);
 }
+
+// story-map/moe-lay/scripts/index.js
+e1(P);
 </script></body>
 </html>
