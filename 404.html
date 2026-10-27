@@ -20,22 +20,11 @@
       data-website-id="bfa1522f-e14a-41de-984a-9dc703fd853b"
     ></script>
     
-  <style>/* story-map/main.css */
-:root{--color-bg-primary:#fff5e8;--color-primary:#7e4c37;--color-text:#000;--color-transparent:#0000;--font-family:"Unkempt",sans-serif;--font-regular:400;--font-bold:700;--ratio:1.4;--size-body:1.6rem;--size-small:calc(var(--size-body)/var(--ratio));--size-heading:calc(var(--size-body)*var(--ratio));--size-title:calc(var(--size-heading)*var(--ratio));--size-display:calc(var(--size-title)*var(--ratio));font-size:10px;@media (width>=640px){&{--size-body:2rem}}}html,body{font-family:var(--font-family);font-size:var(--size-body);background-blend-mode:multiply,normal;background-color:#accf9d;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E"),linear-gradient(135deg,#ded295 0% 20%,#ded295 80% 100%);background-repeat:repeat,no-repeat;background-size:200px 200px,cover;margin:0}
+  <style>:root{--color-bg-primary:#fff5e8;--color-primary:#7e4c37;--color-text:#000;--color-transparent:#0000;--font-family:"Unkempt",sans-serif;--font-regular:400;--font-bold:700;--ratio:1.4;--size-body:1.6rem;--size-small:calc(var(--size-body)/var(--ratio));--size-heading:calc(var(--size-body)*var(--ratio));--size-title:calc(var(--size-heading)*var(--ratio));--size-display:calc(var(--size-title)*var(--ratio));font-size:10px;@media (width>=640px){&{--size-body:2rem}}}html,body{font-family:var(--font-family);font-size:var(--size-body);background-blend-mode:multiply,normal;background-color:#accf9d;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E"),linear-gradient(135deg,#ded295 0% 20%,#ded295 80% 100%);background-repeat:repeat,no-repeat;background-size:200px 200px,cover;margin:0}
 </style></head>
   <body>
     <section-404-intro></section-404-intro>
-  <script type="module">// lib/asset.js
-function m() {
-  let t = document.documentElement.dataset.base || "./";
-  return new URL(t, location.href);
-}
-function c(t) {
-  return new URL(t, m()).href;
-}
-
-// story-map/scripts/fonts.js
-var b = `
+  <script type="module">function m(){let t=document.documentElement.dataset.base||"./";return new URL(t,location.href)}function c(t){return new URL(t,m()).href}var b=`
 @font-face {
     font-family: "Unkempt";
     src: url("${c("./assets/fonts/Unkempt-Regular.woff2")}") format("woff2");
@@ -49,91 +38,7 @@ var b = `
     font-weight: 700;
     font-display: swap;
   }
-`, d = document.createElement("style");
-d.textContent = b;
-document.head.appendChild(d);
-
-// lib/define.js
-function g(t, r) {
-  if (t === void 0) {
-    if (r === Array)
-      return [];
-    if (r === Object)
-      return {};
-    if (r === Boolean)
-      return !1;
-    if (r === Number)
-      return 0;
-    return;
-  }
-  if (r === Boolean)
-    return Boolean(t);
-  if (r === Number)
-    return Number(t);
-  return t;
-}
-function u(t, { props: r = {}, attrs: s = [], styles: p = "", template: i, onRender: l = null }) {
-  let h = ["props", ...s];
-
-  class f extends HTMLElement {
-    static observedAttributes = h;
-    constructor() {
-      super();
-      this.attachShadow({ mode: "open" }), this._cleanup = null;
-    }
-    connectedCallback() {
-      this._render();
-    }
-    disconnectedCallback() {
-      if (typeof this._cleanup === "function")
-        this._cleanup();
-      this._cleanup = null;
-    }
-    attributeChangedCallback() {
-      if (this.isConnected)
-        this._render();
-    }
-    _getProps() {
-      let e = {}, o = this.getAttribute("props");
-      if (o)
-        try {
-          e = JSON.parse(o);
-        } catch {
-          e = {};
-        }
-      let n = {};
-      for (let a of Object.keys(r))
-        n[a] = g(e[a], r[a]);
-      return n;
-    }
-    _applyForwardedAttrs() {
-      if (s.length === 0)
-        return;
-      let e = this.shadowRoot.querySelector("[data-forward]");
-      if (!e)
-        return;
-      for (let o of s)
-        if (this.hasAttribute(o))
-          e.setAttribute(o, this.getAttribute(o));
-        else
-          e.removeAttribute(o);
-    }
-    _render() {
-      if (typeof this._cleanup === "function")
-        this._cleanup(), this._cleanup = null;
-      let e = this._getProps(), o = typeof i === "function" ? i(e) : i;
-      if (this.shadowRoot.innerHTML = `<style>${p}</style>${o}`, this._applyForwardedAttrs(), l) {
-        let n = l(this.shadowRoot, e, this);
-        if (typeof n === "function")
-          this._cleanup = n;
-      }
-    }
-  }
-  customElements.define(t, f);
-}
-
-// story-map/scripts/404/intro.js
-var y = `
+`,d=document.createElement("style");d.textContent=b;document.head.appendChild(d);function g(t,r){if(t===void 0){if(r===Array)return[];if(r===Object)return{};if(r===Boolean)return!1;if(r===Number)return 0;return}if(r===Boolean)return Boolean(t);if(r===Number)return Number(t);return t}function u(t,{props:r={},attrs:s=[],styles:p="",template:i,onRender:l=null}){let h=["props",...s];class f extends HTMLElement{static observedAttributes=h;constructor(){super();this.attachShadow({mode:"open"}),this._cleanup=null}connectedCallback(){this._render()}disconnectedCallback(){if(typeof this._cleanup==="function")this._cleanup();this._cleanup=null}attributeChangedCallback(){if(this.isConnected)this._render()}_getProps(){let e={},o=this.getAttribute("props");if(o)try{e=JSON.parse(o)}catch{e={}}let n={};for(let a of Object.keys(r))n[a]=g(e[a],r[a]);return n}_applyForwardedAttrs(){if(s.length===0)return;let e=this.shadowRoot.querySelector("[data-forward]");if(!e)return;for(let o of s)if(this.hasAttribute(o))e.setAttribute(o,this.getAttribute(o));else e.removeAttribute(o)}_render(){if(typeof this._cleanup==="function")this._cleanup(),this._cleanup=null;let e=this._getProps(),o=typeof i==="function"?i(e):i;if(this.shadowRoot.innerHTML=`<style>${p}</style>${o}`,this._applyForwardedAttrs(),l){let n=l(this.shadowRoot,e,this);if(typeof n==="function")this._cleanup=n}}}customElements.define(t,f)}var y=`
   :host {
     display: block;
     margin-block: 10rem;
@@ -159,7 +64,7 @@ var y = `
     display: block;
     color: #534805;
   }
-`, w = `
+`,w=`
   <section>
       <hgroup>
         <h1>404</h1>
@@ -169,7 +74,6 @@ var y = `
       <a href="/">Stoory Map</a>
 
   </section>
-`;
-u("section-404-intro", { styles: y, template: w });
+`;u("section-404-intro",{styles:y,template:w});
 </script></body>
 </html>

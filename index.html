@@ -15,25 +15,14 @@
         height: 100dvh;
       }
     </style>
-  <style>/* story-map/main.css */
-:root{--color-bg-primary:#fff5e8;--color-primary:#7e4c37;--color-text:#000;--color-transparent:#0000;--font-family:"Unkempt",sans-serif;--font-regular:400;--font-bold:700;--ratio:1.4;--size-body:1.6rem;--size-small:calc(var(--size-body)/var(--ratio));--size-heading:calc(var(--size-body)*var(--ratio));--size-title:calc(var(--size-heading)*var(--ratio));--size-display:calc(var(--size-title)*var(--ratio));font-size:10px;@media (width>=640px){&{--size-body:2rem}}}html,body{font-family:var(--font-family);font-size:var(--size-body);background-blend-mode:multiply,normal;background-color:#accf9d;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E"),linear-gradient(135deg,#ded295 0% 20%,#ded295 80% 100%);background-repeat:repeat,no-repeat;background-size:200px 200px,cover;margin:0}
+  <style>:root{--color-bg-primary:#fff5e8;--color-primary:#7e4c37;--color-text:#000;--color-transparent:#0000;--font-family:"Unkempt",sans-serif;--font-regular:400;--font-bold:700;--ratio:1.4;--size-body:1.6rem;--size-small:calc(var(--size-body)/var(--ratio));--size-heading:calc(var(--size-body)*var(--ratio));--size-title:calc(var(--size-heading)*var(--ratio));--size-display:calc(var(--size-title)*var(--ratio));font-size:10px;@media (width>=640px){&{--size-body:2rem}}}html,body{font-family:var(--font-family);font-size:var(--size-body);background-blend-mode:multiply,normal;background-color:#accf9d;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E"),linear-gradient(135deg,#ded295 0% 20%,#ded295 80% 100%);background-repeat:repeat,no-repeat;background-size:200px 200px,cover;margin:0}
 </style></head>
   <body>
     <div>
       <section-hero></section-hero>
       <section-background-photos></section-background-photos>
     </div>
-  <script type="module">// lib/asset.js
-function b() {
-  let o = document.documentElement.dataset.base || "./";
-  return new URL(o, location.href);
-}
-function e(o) {
-  return new URL(o, b()).href;
-}
-
-// story-map/scripts/fonts.js
-var w = `
+  <script type="module">function b(){let o=document.documentElement.dataset.base||"./";return new URL(o,location.href)}function e(o){return new URL(o,b()).href}var w=`
 @font-face {
     font-family: "Unkempt";
     src: url("${e("./assets/fonts/Unkempt-Regular.woff2")}") format("woff2");
@@ -47,94 +36,7 @@ var w = `
     font-weight: 700;
     font-display: swap;
   }
-`, h = document.createElement("style");
-h.textContent = w;
-document.head.appendChild(h);
-
-// lib/define.js
-function v(o, i) {
-  if (o === void 0) {
-    if (i === Array)
-      return [];
-    if (i === Object)
-      return {};
-    if (i === Boolean)
-      return !1;
-    if (i === Number)
-      return 0;
-    return;
-  }
-  if (i === Boolean)
-    return Boolean(o);
-  if (i === Number)
-    return Number(o);
-  return o;
-}
-function l(o, { props: i = {}, attrs: d = [], styles: u = "", template: c, onRender: m = null }) {
-  let g = ["props", ...d];
-
-  class f extends HTMLElement {
-    static observedAttributes = g;
-    constructor() {
-      super();
-      this.attachShadow({ mode: "open" }), this._cleanup = null;
-    }
-    connectedCallback() {
-      this._render();
-    }
-    disconnectedCallback() {
-      if (typeof this._cleanup === "function")
-        this._cleanup();
-      this._cleanup = null;
-    }
-    attributeChangedCallback() {
-      if (this.isConnected)
-        this._render();
-    }
-    _getProps() {
-      let n = {}, r = this.getAttribute("props");
-      if (r)
-        try {
-          n = JSON.parse(r);
-        } catch {
-          n = {};
-        }
-      let s = {};
-      for (let p of Object.keys(i))
-        s[p] = v(n[p], i[p]);
-      return s;
-    }
-    _applyForwardedAttrs() {
-      if (d.length === 0)
-        return;
-      let n = this.shadowRoot.querySelector("[data-forward]");
-      if (!n)
-        return;
-      for (let r of d)
-        if (this.hasAttribute(r))
-          n.setAttribute(r, this.getAttribute(r));
-        else
-          n.removeAttribute(r);
-    }
-    _render() {
-      if (typeof this._cleanup === "function")
-        this._cleanup(), this._cleanup = null;
-      let n = this._getProps(), r = typeof c === "function" ? c(n) : c;
-      if (this.shadowRoot.innerHTML = `<style>${u}</style>${r}`, this._applyForwardedAttrs(), m) {
-        let s = m(this.shadowRoot, n, this);
-        if (typeof s === "function")
-          this._cleanup = s;
-      }
-    }
-  }
-  customElements.define(o, f);
-}
-
-// story-map/scripts/breakpoints.js
-var t = "640px", a = "1280px";
-
-// story-map/scripts/home/hero.js
-var y = `
+`,h=document.createElement("style");h.textContent=w;document.head.appendChild(h);function v(o,i){if(o===void 0){if(i===Array)return[];if(i===Object)return{};if(i===Boolean)return!1;if(i===Number)return 0;return}if(i===Boolean)return Boolean(o);if(i===Number)return Number(o);return o}function l(o,{props:i={},attrs:d=[],styles:u="",template:c,onRender:m=null}){let g=["props",...d];class f extends HTMLElement{static observedAttributes=g;constructor(){super();this.attachShadow({mode:"open"}),this._cleanup=null}connectedCallback(){this._render()}disconnectedCallback(){if(typeof this._cleanup==="function")this._cleanup();this._cleanup=null}attributeChangedCallback(){if(this.isConnected)this._render()}_getProps(){let n={},r=this.getAttribute("props");if(r)try{n=JSON.parse(r)}catch{n={}}let s={};for(let p of Object.keys(i))s[p]=v(n[p],i[p]);return s}_applyForwardedAttrs(){if(d.length===0)return;let n=this.shadowRoot.querySelector("[data-forward]");if(!n)return;for(let r of d)if(this.hasAttribute(r))n.setAttribute(r,this.getAttribute(r));else n.removeAttribute(r)}_render(){if(typeof this._cleanup==="function")this._cleanup(),this._cleanup=null;let n=this._getProps(),r=typeof c==="function"?c(n):c;if(this.shadowRoot.innerHTML=`<style>${u}</style>${r}`,this._applyForwardedAttrs(),m){let s=m(this.shadowRoot,n,this);if(typeof s==="function")this._cleanup=s}}}customElements.define(o,f)}var t="640px",a="1280px";var y=`
   :host {
     display: flex;
     justify-content: center;
@@ -285,12 +187,12 @@ var y = `
     }
   }
 
-`, x = `
+`,x=`
   <section>
     <hgroup>
       <h1>Stoory Map</h1>
       <p>Turn your memories into a map</p>
-      <a href="/juzbird" target="_blank">Preview</a>
+      <a href="/preview" target="_blank">Preview</a>
     </hgroup>
 
     <h2>Contact on:</h2>
@@ -303,11 +205,7 @@ var y = `
       </a></li>
     </ul>
   </section>
-`;
-l("section-hero", { styles: y, template: x });
-
-// story-map/scripts/home/background-photos.js
-var k = `
+`;l("section-hero",{styles:y,template:x});var k=`
   :host {
     display: block;
   }
@@ -529,7 +427,7 @@ var k = `
     width: 10rem;
   }
 
-`, $ = `
+`,$=`
   <section>
     <ul>
         <li>
@@ -563,7 +461,6 @@ var k = `
     <img class="flower" src=${e("./assets/images/flowers-sg.png")} alt="Flowers">
     <img class="penguins" src=${e("./assets/images/penguins.png")} alt="Penguins">
   </section>
-`;
-l("section-background-photos", { styles: k, template: $ });
+`;l("section-background-photos",{styles:k,template:$});
 </script></body>
 </html>
